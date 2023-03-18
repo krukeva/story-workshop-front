@@ -19,7 +19,7 @@ export default function Stories() {
 
   return (
     <>
-      <GridContainer>
+      <GridContainer numberOfColumns="4">
         {stories.map((story) => (
           <StoryCard key={story.id} story={story} />
         ))}

@@ -2,12 +2,13 @@ import { NavLink } from "react-router-dom"
 import styled from "styled-components"
 
 import colors from "../../utils/styles/colors"
+import dimensions from "./dimensions"
 
 const NavContainer = styled.nav`
   background-color: ${colors.darkPrimary};
   padding: 5px 20px;
   margin: 0;
-  height: 50px;
+  height: ${dimensions.headerheight};
   display: flex;
   flex-direction: line;
   justify-content: space-between;

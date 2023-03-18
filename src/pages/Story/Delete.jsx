@@ -3,7 +3,7 @@ import { useState } from "react"
 import styled from "styled-components"
 
 import colors from "../../utils/styles/colors"
-import Modal from "../../components/Modal"
+import Modal from "../../utils/templates/Modal"
 
 const Buttons = styled.div`
   display: flex;

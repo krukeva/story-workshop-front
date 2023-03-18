@@ -8,8 +8,9 @@ import Root from "./routes/root"
 import ErrorPage from './pages/Error'
 
 import Stories, {loader as storyListLoader} from './pages/Stories'
-import { actionCreateStory, actionUpdateStory, actionDeleteStory } from "./pages/Story/actions.js"
+import { actionCreateStory, actionUpdateStory, actionDeleteStory, actionExportStory } from "./pages/Story/actions.js"
 import DeleteStory from './pages/Story/Delete'
+import ExportStory from './pages/Story/Export'
 import Story, { loader as storyLoader } from "./pages/Story"
 
 import Worlds, {loader as worldListLoader, action as worldUpload} from './pages/Worlds'
@@ -45,6 +46,11 @@ const router = createBrowserRouter([
               {
                 path: "update",
                 action: actionUpdateStory,
+              },
+              {
+                path: "export",
+                element: <ExportStory />,
+                action: actionExportStory,
               },
               {
                 path: "delete",

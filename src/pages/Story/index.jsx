@@ -1,4 +1,4 @@
-import { useLoaderData, useSubmit, Outlet } from "react-router-dom"
+import { useLoaderData, useSubmit, Outlet, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { Formik, Field, Form } from "formik"
 
@@ -16,7 +16,6 @@ import QuillReader from "../../components/QuillReader"
 
 import { getStory } from "../../database/stories"
 import { getWorld, getWorlds } from "../../database/worlds"
-import { writeFile } from "../../utils/functions/files"
 
 const StyledKeyword = styled.span`
   display: inline-block;
@@ -45,6 +44,7 @@ export default function Story() {
   const [newKeyword, setNewKeyword] = useState("")
   const [newKeywords, setNewKeywords] = useState([])
   const submit = useSubmit()
+  const navigate = useNavigate()
 
   // Necessary for the mapping in case story.keywords is undefined
   story.keywords = (Array.isArray(story.keywords) && story.keywords) || []
@@ -157,7 +157,7 @@ export default function Story() {
             <EditButton onClick={() => setEditData(true)} />
           </FixedDiv>
           <FixedDiv top="80px" left="80px">
-            <ExportButton onClick={() => writeFile(story, story.name)} />
+            <ExportButton onClick={() => navigate("export")} />
           </FixedDiv>
 
           <DataTemplate>

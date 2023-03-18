@@ -24,6 +24,20 @@ export async function createStory(worldId) {
   return story;
 }
 
+export async function importStory(story) {
+  let stories = await getStories();
+  //Check if the story exists
+  let index = stories.findIndex(myStory => story.id === myStory.id);
+    if (index > -1) {
+      console.log("Cette histoire existe déjà")
+      return false
+    } else {
+      stories.unshift(story);
+    }
+  await set(stories);
+  return story;
+}
+
 export async function getStory(id) {
   let stories = await localforage.getItem("stories");
   let story = stories.find(story => story.id === id);

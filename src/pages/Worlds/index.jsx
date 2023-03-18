@@ -29,7 +29,7 @@ export default function Worlds() {
 
   return (
     <>
-      <GridContainer>
+      <GridContainer numberOfColumns="5">
         {worlds.map((world) => (
           <WorldCard
             key={world.id}

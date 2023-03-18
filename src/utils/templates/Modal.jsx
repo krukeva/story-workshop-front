@@ -2,12 +2,14 @@ import React, { useEffect } from "react"
 import { createPortal } from "react-dom"
 import styled from "styled-components"
 
-import colors from "../../utils/styles/colors"
+import colors from "../styles/colors"
+import dimensions from "./dimensions"
 
 const Overlay = styled.div`
   position: fixed;
+  z-index: 10;
   left: 0;
-  top: 60px;
+  top: ${dimensions.headerheight};
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
@@ -30,10 +32,10 @@ const ModalHeader = styled.div`
 const ModalBody = styled.div`
   padding: 10px;
   border-top: 1px solid ${colors.primary};
-  border-bottom: 1px solid ${colors.primary};
 `
 
 const ModalFooter = styled.div`
+  border-top: 1px solid ${colors.primary};
   padding: 10px;
 `
 
@@ -76,7 +78,9 @@ export default function Modal({ children, show, onClose, colorTheme }) {
 
         <ModalBody>{subComponents.Body}</ModalBody>
 
-        <ModalFooter>{subComponents.Footer}</ModalFooter>
+        {subComponents.Footer.length > 0 && (
+          <ModalFooter>{subComponents.Footer}</ModalFooter>
+        )}
       </ModalWrapper>
     </Overlay>,
     document.getElementById("root")
