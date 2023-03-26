@@ -16,6 +16,8 @@ export default function StoryCard({ story }) {
         <Card.Header.Buttons>
           <DeleteButton
             type="button"
+            size="25px"
+            fontSize="12px"
             onClick={() => navigate(`/stories/${story.id}/delete`)}
           />
         </Card.Header.Buttons>

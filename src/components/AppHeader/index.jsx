@@ -2,6 +2,7 @@ import { useNavigate } from "react-router"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileArrowUp } from "@fortawesome/free-solid-svg-icons"
+
 import colors from "../../utils/styles/colors"
 import Header, { TitleLink } from "../../utils/templates/Header"
 
@@ -32,7 +33,7 @@ const Button = styled.button`
   }
 `
 
-function AppHeader() {
+function AppHeader({ collapsed }) {
   const navigate = useNavigate()
   const loadStory = async () => {
     const newStory = await readFile()
@@ -45,12 +46,12 @@ function AppHeader() {
   }
 
   return (
-    <Header>
+    <Header collapsed={collapsed}>
       <LeftDiv>
         <Button onClick={loadStory}>
           <FontAwesomeIcon icon={faFileArrowUp} />
         </Button>
-        <TitleLink to="/Stories">Catalogue des histoires</TitleLink>
+        <TitleLink to="/">Catalogue des histoires</TitleLink>
       </LeftDiv>
 
       <TitleLink to="/Worlds">Catalogue des mondes</TitleLink>

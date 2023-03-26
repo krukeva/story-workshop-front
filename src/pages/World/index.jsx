@@ -18,7 +18,8 @@ export default function World() {
 
   return (
     <div>
-      Hello world {`${world.name}`}!<Outlet context={world} />
+      <div>Hello world {`${world.name}`}!</div>
+      <Outlet context={world} />
     </div>
   )
 }

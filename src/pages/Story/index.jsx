@@ -16,6 +16,7 @@ import QuillReader from "../../components/QuillReader"
 
 import { getStory } from "../../database/stories"
 import { getWorld, getWorlds } from "../../database/worlds"
+import { loadStory } from "../../services/storyService"
 
 const StyledKeyword = styled.span`
   display: inline-block;
@@ -159,6 +160,14 @@ export default function Story() {
           <FixedDiv top="80px" left="80px">
             <ExportButton onClick={() => navigate("export")} />
           </FixedDiv>
+          <button
+            onClick={() => {
+              loadStory(story.id)
+              navigate(`/story`)
+            }}
+          >
+            Charger cette histoire
+          </button>
 
           <DataTemplate>
             <DataTemplate.Name>

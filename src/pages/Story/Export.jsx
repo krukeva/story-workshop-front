@@ -31,6 +31,8 @@ export default function ExportStory() {
   const story = useOutletContext()
   const submit = useSubmit()
 
+  setShow(true)
+
   let version
   if (typeof story.version === "undefined") {
     version = [0, 0, 0]

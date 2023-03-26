@@ -45,7 +45,7 @@ export default function DeleteWorld() {
           <Form method="post">
             <DeleteButton type="submit">OK</DeleteButton>
           </Form>
-          <Button type="button" onClick={() => navigate("/worlds")}>
+          <Button type="button" onClick={() => navigate(-1)}>
             Annuler
           </Button>
         </Buttons>

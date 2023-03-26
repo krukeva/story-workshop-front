@@ -23,7 +23,7 @@ export default function ErrorPage() {
   console.error(error)
 
   return (
-    <div id="error-page" class="pageContainer withBackground">
+    <div id="error-page" className="pageContainer withBackground">
       <ErrorTitle>Oups...</ErrorTitle>
       <ErrorSubtitle>Il semble qu'il y ait un problème...</ErrorSubtitle>
       {error.status === 404 ? (

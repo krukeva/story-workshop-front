@@ -12,14 +12,14 @@ export async function actionUpdateStory({ params, request }) {
   const { storyId } = params
   const formData = await request.formData()
   const updates = Object.fromEntries(formData)
-  updates.keywords=updates.keywords.split("|")
+  updates.keywords = updates.keywords.split("|")
   const updatedStory = await updateStory(storyId, updates)
   return redirect(`/stories/${updatedStory.id}`)
 }
 
 export async function actionDeleteStory({ params }) {
   const res = await deleteStory(params.storyId)
-  return res && redirect(`/stories`)
+  return res && redirect(`/`)
 }
 
 export async function actionExportStory({ params, request }) {
@@ -27,6 +27,6 @@ export async function actionExportStory({ params, request }) {
   const formData = await request.formData()
   const updates = Object.fromEntries(formData)
   const updatedStory = await updateStory(storyId, updates)
-  writeFile( updatedStory, `story_${updatedStory.name}_v${updatedStory.version}`)
+  writeFile(updatedStory, `story_${updatedStory.name}_v${updatedStory.version}`)
   return redirect(`/stories/${updatedStory.id}`)
 }

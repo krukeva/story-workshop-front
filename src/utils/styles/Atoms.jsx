@@ -29,7 +29,7 @@ export const RoundButton = styled.button`
   padding: 0;
   background-color: ${(props) => props.color || colors.primary};
   font-family: sans-serif; /* Use whatever font-family you want */
-  font-size: 1rem;
+  font-size: ${(props) => props.fontSize || "25px"};
   line-height: 1;
   -webkit-appearance: none;
   &:hover {
@@ -75,7 +75,7 @@ const rotate = keyframes`
 
 export const Loader = styled.div`
   padding: 10px;
-  border: 6px solid ${colors.primary};
+  border: 6px solid ${(props) => `props.color || colors.primary`};
   border-bottom-color: transparent;
   border-radius: 22px;
   animation: ${rotate} 1s infinite linear;

@@ -3,13 +3,22 @@ import styled from "styled-components"
 
 import colors from "../styles/colors"
 
-import DefaultPicture from "../../assets/profile.png"
+import defaultPerson from "../../assets/profile.png"
+import defaultEquipment from "../../assets/defaultEquipment.png"
+import defaultSite from "../../assets/defaultSite.png"
+import defaultOrganisation from "../../assets/defaultOrganisation.png"
+
+const defaultImage = {
+  person: defaultPerson,
+  organisation: defaultOrganisation,
+  site: defaultSite,
+  equipment: defaultEquipment,
+}
 
 const Template = styled.div`
   width: 75%;
   margin: 25px auto;
   background-color: white;
-  min-height: 500px;
   padding: 50px;
 `
 
@@ -44,11 +53,10 @@ const StyledHeader = styled.div`
   border-bottom: 1px solid ${colors.lightPrimary};
   margin-bottom: 25px;
 `
-const ProfileImage = styled.img`
+const Image = styled.img`
   display: block;
   height: 80px;
   width: 80px;
-  border-radius: 50%;
   padding: 1em;
 `
 const HeaderDataWrapper = styled.div`
@@ -57,11 +65,11 @@ const HeaderDataWrapper = styled.div`
   justify-content: space-around;
 `
 
-const Header = ({ children }) => {
+const Header = ({ entityType, children }) => {
   return (
     <StyledHeader>
       <HeaderDataWrapper>{children}</HeaderDataWrapper>
-      <ProfileImage src={DefaultPicture} alt="Profile image" />
+      <Image src={defaultImage[entityType]} alt="Profile image" />
     </StyledHeader>
   )
 }

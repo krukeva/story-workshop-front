@@ -8,8 +8,8 @@ const NavContainer = styled.nav`
   background-color: ${colors.darkPrimary};
   padding: 5px 20px;
   margin: 0;
-  height: ${dimensions.headerheight};
-  display: flex;
+  height: ${dimensions.headerHeight};
+  display: ${(props) => (!props.collapsed ? "flex" : "none")};
   flex-direction: line;
   justify-content: space-between;
   align-items: center;
@@ -28,7 +28,7 @@ export const TitleLink = styled(NavLink)`
   }
 `
 
-function Header({ children }) {
-  return <NavContainer>{children}</NavContainer>
+function Header({ collapsed, children }) {
+  return <NavContainer collapsed={collapsed}>{children}</NavContainer>
 }
 export default Header

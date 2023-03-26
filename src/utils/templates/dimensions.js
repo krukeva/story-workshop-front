@@ -1,4 +1,5 @@
 const dimensions = {
-    headerheight: '50px'
+  headerHeight: "10vh",
+  mainBodyHeight: "90vh",
 }
 export default dimensions

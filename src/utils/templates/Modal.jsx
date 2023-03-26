@@ -9,7 +9,7 @@ const Overlay = styled.div`
   position: fixed;
   z-index: 10;
   left: 0;
-  top: ${dimensions.headerheight};
+  top: ${dimensions.headerHeight};
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);

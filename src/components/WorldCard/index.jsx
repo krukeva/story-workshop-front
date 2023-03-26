@@ -17,6 +17,8 @@ export default function WorldCard({ world, isUsed }) {
           <Card.Header.Buttons>
             <DeleteButton
               type="button"
+              size="25px"
+              fontSize="12px"
               onClick={() => navigate(`/worlds/${world.id}/delete`)}
             />
           </Card.Header.Buttons>

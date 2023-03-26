@@ -1,56 +1,108 @@
-import localforage from "localforage";
-import { matchSorter } from "match-sorter";
-import sortBy from "sort-by";
+import localforage from "localforage"
+import { matchSorter } from "match-sorter"
+import sortBy from "sort-by"
 
-export async function getOrganisationList( storyId, query ) {
-  let organisations = await localforage.getItem("organisations");
-  if (!organisations) {
-    organisations = [];
-  } else if (storyId) {
-    organisations = organisations.filter( organisation => organisation.storyId === storyId )
+export async function getOrganisationList(query) {
+  await fakeNetwork()
+
+  try {
+    let organisations = await localforage.getItem("organisations")
+    if (!organisations) {
+      organisations = []
+    }
+    if (query) {
+      organisations = matchSorter(organisations, query, {
+        keys: ["name", "keywords"],
+      })
+    }
+    return organisations.sort(sortBy("name"))
+  } catch (error) {
+    throw error
   }
-  if (query) {
-    organisations = matchSorter(organisations, query, { keys: ["name"] });
-  }
-  return organisations.sort(sortBy("name"));
 }
 
-export async function createOrganisation(storyId) {
-  let id = Math.random().toString(36).substring(2, 9);
-  let organisation = { id, storyId, createdAt: Date.now() };
-  let organisations = await getOrganisationList();
-  organisations.unshift(organisation);
-  await set(organisations);
-  return organisation;
+export async function createOrganisation(itemToInsert) {
+  await fakeNetwork()
+
+  let id = Math.random().toString(36).substring(2, 9)
+  let organisation = { id, ...itemToInsert }
+  try {
+    let organisations = await getOrganisationList()
+    organisations.unshift(organisation)
+    await set(organisations)
+    return organisation
+  } catch (error) {
+    throw error
+  }
 }
 
 export async function getOrganisation(id) {
-  let organisations = await localforage.getItem("organisations");
-  if (!organisations) return null;
-  let organisation = organisations.find(organisation => organisation.id === id);
-  return organisation ?? null;
+  await fakeNetwork()
+
+  try {
+    let organisations = await getOrganisationList()
+    if (!organisations) return null
+    let organisation = organisations.find(
+      (organisation) => organisation.id === id
+    )
+    return organisation ?? null
+  } catch (error) {
+    throw error
+  }
 }
 
 export async function updateOrganisation(id, updates) {
-  let organisations = await localforage.getItem("organisations");
-  let organisation = organisations.find(organisation => organisation.id === id);
-  if (!organisation) throw new Error("No world organisation found for", id);
-  Object.assign(organisation, updates);
-  await set(organisations);
-  return organisation;
+  await fakeNetwork()
+
+  try {
+    let organisations = await getOrganisationList()
+    let organisation = organisations.find(
+      (organisation) => organisation.id === id
+    )
+    if (!organisation) throw new Error(`No organisation found for ${id}`)
+    Object.assign(organisation, updates)
+    await set(organisations)
+    return organisation
+  } catch (error) {
+    throw error
+  }
 }
 
 export async function deleteOrganisation(id) {
-  let organisations = await localforage.getItem("organisations");
-  let index = organisations.findIndex(organisation => organisation.id === id);
-  if (index > -1) {
-    organisations.splice(index, 1);
-    await set(organisations);
-    return true;
+  try {
+    let organisations = await getOrganisationList()
+    let index = organisations.findIndex(
+      (organisation) => organisation.id === id
+    )
+    if (index > -1) {
+      organisations.splice(index, 1)
+      await set(organisations)
+      return true
+    }
+    return false
+  } catch (error) {
+    throw error
   }
-  return false;
 }
 
 function set(organisations) {
-  return localforage.setItem("organisations", organisations);
+  return localforage.setItem("organisations", organisations)
+}
+
+// fake a cache so we don't slow down stuff we've already seen
+let fakeCache = {}
+
+async function fakeNetwork(key) {
+  if (!key) {
+    fakeCache = {}
+  }
+
+  if (fakeCache[key]) {
+    return
+  }
+
+  fakeCache[key] = true
+  return new Promise((res) => {
+    setTimeout(res, Math.random() * 800)
+  })
 }

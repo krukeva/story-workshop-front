@@ -8,9 +8,21 @@ const StyledGlobalStyle = createGlobalStyle`
       box-sizing: border-box;
     }
 
+    html {
+      height: 100%;
+    }
+
     body {
         background-color: white;
-        margin: 0;  
+        margin: 0;
+        line-height: 1.5;
+        min-height: 100vh;
+    }
+
+    div.root {
+      margin: 0;
+      height: 100vh;
+      overflow: auto;
     }
 
     div.pageContainer {

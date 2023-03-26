@@ -1,5 +1,3 @@
-import styled from "styled-components"
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faPlus,
@@ -8,62 +6,104 @@ import {
   faTrash,
   faFileExport,
   faFileArrowUp,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons"
 
 import colors from "../../utils/styles/colors"
 import { RoundButton } from "../../utils/styles/Atoms"
 
-const Button = styled(RoundButton)`
-  font-size: 25px;
-`
-
-export function AddButton({ onClick, type }) {
+export function CancelButton({ onClick, type, color, size, fontSize }) {
   return (
-    <Button onClick={onClick} type={type}>
+    <RoundButton
+      onClick={onClick}
+      type={type}
+      color={color}
+      size={size}
+      fontSize={fontSize}
+    >
+      <FontAwesomeIcon icon={faXmark} />
+    </RoundButton>
+  )
+}
+
+export function AddButton({ onClick, type, color, size, fontSize }) {
+  return (
+    <RoundButton
+      onClick={onClick}
+      type={type}
+      color={color}
+      size={size}
+      fontSize={fontSize}
+    >
       <FontAwesomeIcon icon={faPlus} />
-    </Button>
+    </RoundButton>
   )
 }
 
-export function ImportButton({ onClick, type }) {
+export function ImportButton({ onClick, type, color, size, fontSize }) {
   return (
-    <Button onClick={onClick} type={type}>
+    <RoundButton
+      onClick={onClick}
+      type={type}
+      color={color}
+      size={size}
+      fontSize={fontSize}
+    >
       <FontAwesomeIcon icon={faFileArrowUp} />
-    </Button>
+    </RoundButton>
   )
 }
 
-export function ExportButton({ onClick, type }) {
+export function ExportButton({ onClick, type, color, size, fontSize }) {
   return (
-    <Button onClick={onClick} type={type}>
+    <RoundButton
+      onClick={onClick}
+      type={type}
+      color={color}
+      size={size}
+      fontSize={fontSize}
+    >
       <FontAwesomeIcon icon={faFileExport} />
-    </Button>
+    </RoundButton>
   )
 }
 
-export function EditButton({ onClick, type }) {
+export function EditButton({ onClick, type, color, size, fontSize }) {
   return (
-    <Button onClick={onClick} type={type}>
+    <RoundButton
+      onClick={onClick}
+      type={type}
+      color={color}
+      size={size}
+      fontSize={fontSize}
+    >
       <FontAwesomeIcon icon={faPen} />
-    </Button>
+    </RoundButton>
   )
 }
 
-export function SubmitButton({ onClick, type }) {
+export function SubmitButton({ onClick, type, color, size, fontSize }) {
   return (
-    <RoundButton onClick={onClick} type={type}>
+    <RoundButton
+      onClick={onClick}
+      type={type}
+      color={color}
+      size={size}
+      fontSize={fontSize}
+    >
       <FontAwesomeIcon icon={faCheck} />
     </RoundButton>
   )
 }
 
-export function DeleteButton({ onClick, type }) {
+export function DeleteButton({ onClick, type, size, fontSize }) {
   return (
     <RoundButton
       color={colors.danger}
-      size="30px"
       onClick={onClick}
       type={type}
+      size={size}
+      fontSize={fontSize}
     >
       <FontAwesomeIcon icon={faTrash} />
     </RoundButton>
