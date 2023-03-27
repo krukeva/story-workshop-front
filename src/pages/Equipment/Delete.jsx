@@ -42,7 +42,7 @@ export default function DeleteEquipment() {
       </Modal.Body>
       <Modal.Footer>
         <Buttons>
-          <Form method="post">
+          <Form method="post" onSubmit={() => setShow(false)}>
             <DeleteButton type="submit">OK</DeleteButton>
           </Form>
           <Button type="button" onClick={() => navigate(-1)}>

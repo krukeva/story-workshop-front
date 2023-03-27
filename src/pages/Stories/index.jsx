@@ -25,7 +25,7 @@ export default function Stories() {
         ))}
       </GridContainer>
       <FixedDiv bottom="50px" right="50px">
-        <Form method="post" action={"/stories/create"}>
+        <Form method="post">
           <AddButton type="submit" />
         </Form>
       </FixedDiv>

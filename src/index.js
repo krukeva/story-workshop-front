@@ -4,31 +4,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
 import GlobalStyle from "./utils/styles/GlobalStyle"
 
-import Root from "./routes/Root"
+import Root from "./routes/root"
 import ErrorPage from "./routes/Error"
 
-import Stories, { loader as storyListLoader } from "./pages/Stories"
-import {
-  actionCreateStory,
-  actionUpdateStory,
-  actionDeleteStory,
-  actionExportStory,
-} from "./pages/Story/actions.js"
-import DeleteStory from "./pages/Story/Delete"
-import ExportStory from "./pages/Story/Export"
-import Story, { loader as storyLoader } from "./pages/Story"
-
-import StoryRoot, { loader as storyRootLoader } from "./routes/StoryRoot"
-import StoryIndex from "./routes/StoryRoot/StoryIndex"
+import CurrentStoryWorkspace, {
+  loader as storyRootLoader,
+} from "./routes/CurrentStory"
+import StoryIndex from "./routes/CurrentStory/StoryIndex"
 import { actionUpdateCurrentStory } from "./controllers/currentStoryController"
-
-import Worlds, {
-  loader as worldListLoader,
-  action as worldUpload,
-} from "./pages/Worlds"
-import { actionDeleteWorld } from "./pages/Worlds/actions"
-import DeleteWorld from "./pages/World/Delete"
-import World, { loader as worldLoader } from "./pages/World"
 
 import People, { loader as peopleLoader } from "./routes/People"
 import PeopleIndex from "./routes/People/PeopleIndex"
@@ -106,6 +89,33 @@ import {
   actionDeleteSituation,
 } from "./controllers/situationController"
 
+/////////////////////////////////////////////////
+// Story catalogue
+/////////////////////////////////////////////////
+import StoryManager from "./routes/StoryManager"
+import Stories, { loader as storyListLoader } from "./pages/Stories"
+import Story, { loader as storyLoader } from "./pages/Story"
+import DeleteStory from "./pages/Story/Delete"
+import ExportStory from "./pages/Story/Export"
+import {
+  actionCreateStory,
+  actionUpdateStory,
+  actionDeleteStory,
+  actionExportStory,
+} from "./controllers/storyController"
+
+/////////////////////////////////////////////////
+// World catalogue
+/////////////////////////////////////////////////
+import WorldManager from "./routes/WorldManager"
+import Worlds, { loader as worldListLoader } from "./pages/Worlds"
+import World, { loader as worldLoader } from "./pages/World"
+import DeleteWorld from "./pages/World/Delete"
+import {
+  actionDeleteWorld,
+  actionLoadWorlds,
+} from "./controllers/worldController"
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -113,38 +123,8 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        index: true,
-        element: <Stories />,
-        loader: storyListLoader,
-      },
-      {
-        path: "stories/create",
-        action: actionCreateStory,
-      },
-      {
-        path: "stories/:storyId",
-        element: <Story />,
-        loader: storyLoader,
-        children: [
-          {
-            path: "update",
-            action: actionUpdateStory,
-          },
-          {
-            path: "export",
-            element: <ExportStory />,
-            action: actionExportStory,
-          },
-          {
-            path: "delete",
-            element: <DeleteStory />,
-            action: actionDeleteStory,
-          },
-        ],
-      },
-      {
         path: "story",
-        element: <StoryRoot />,
+        element: <CurrentStoryWorkspace />,
         loader: storyRootLoader,
         children: [
           {
@@ -399,14 +379,55 @@ const router = createBrowserRouter([
           },
         ],
       },
+    ],
+  },
+  {
+    path: "/stories",
+    element: <StoryManager />,
+    errorElement: <ErrorPage />,
+    children: [
       {
-        path: "worlds",
-        element: <Worlds />,
-        loader: worldListLoader,
-        action: worldUpload,
+        index: true,
+        element: <Stories />,
+        loader: storyListLoader,
+        action: actionCreateStory,
       },
       {
-        path: "worlds/:worldId",
+        path: ":storyId",
+        element: <Story />,
+        loader: storyLoader,
+        children: [
+          {
+            path: "update",
+            action: actionUpdateStory,
+          },
+          {
+            path: "export",
+            element: <ExportStory />,
+            action: actionExportStory,
+          },
+          {
+            path: "delete",
+            element: <DeleteStory />,
+            action: actionDeleteStory,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: "worlds",
+    element: <WorldManager />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <Worlds />,
+        loader: worldListLoader,
+        action: actionLoadWorlds,
+      },
+      {
+        path: ":worldId",
         element: <World />,
         loader: worldLoader,
         children: [

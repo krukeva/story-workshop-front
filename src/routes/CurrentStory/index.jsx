@@ -1,10 +1,4 @@
-import {
-  useLoaderData,
-  Outlet,
-  useOutletContext,
-  NavLink,
-} from "react-router-dom"
-import { useEffect } from "react"
+import { useLoaderData, Outlet, NavLink } from "react-router-dom"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
@@ -45,18 +39,14 @@ export async function loader() {
   return { story }
 }
 
-export default function StoryRoot() {
+export default function CurrentStoryWorkspace() {
   const { story } = useLoaderData()
-  const [collapsed, setCollapsed] = useOutletContext()
 
-  useEffect(() => {
-    setCollapsed(story !== {})
-  }, [story, setCollapsed])
   return (
     <div>
       <Header>
         <LeftDiv>
-          <button onClick={() => setCollapsed(!collapsed)}>
+          <button onClick={() => null}>
             <FontAwesomeIcon icon={faBars} />
           </button>
           <StoryTitle to="/story">{story.name}</StoryTitle>

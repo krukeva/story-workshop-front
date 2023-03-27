@@ -31,8 +31,6 @@ export default function ExportStory() {
   const story = useOutletContext()
   const submit = useSubmit()
 
-  setShow(true)
-
   let version
   if (typeof story.version === "undefined") {
     version = [0, 0, 0]
@@ -41,7 +39,7 @@ export default function ExportStory() {
   }
 
   return (
-    <Modal show={show} onClose={() => navigate("..")}>
+    <Modal show={show} setShow={setShow} onClose={() => navigate("..")}>
       <Modal.Header>
         Export de l'histoire{" "}
         <b>
@@ -65,6 +63,7 @@ export default function ExportStory() {
             version: `${version[0]}.${version[1]}.${version[2] + 1}`,
           }}
           onSubmit={async (values) => {
+            setShow(false)
             submit(values, { method: "post" })
           }}
         >

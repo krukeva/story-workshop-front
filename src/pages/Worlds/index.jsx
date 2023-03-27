@@ -5,23 +5,13 @@ import { FixedDiv } from "../../utils/styles/Atoms"
 import { ImportButton } from "../../components/buttons"
 
 import WorldCard from "../../components/WorldCard"
-import { getWorlds, importWorlds } from "../../database/worlds"
+import { getAllWorlds } from "../../services/worldService"
 import { getStories } from "../../database/stories"
 
-import { readFile } from "../../utils/functions/files"
-const loadWorlds = async () => {
-  const newWorlds = await readFile()
-  return importWorlds(newWorlds)
-}
-
 export async function loader() {
-  const worlds = await getWorlds()
+  const worlds = await getAllWorlds()
   const stories = await getStories()
   return { worlds, stories }
-}
-
-export async function action() {
-  return loadWorlds()
 }
 
 export default function Worlds() {
