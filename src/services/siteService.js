@@ -1,5 +1,5 @@
 import * as Site from "../database/sites"
-import { readStory } from "./storyService.js"
+import { readStory } from "./currentStoryService.js"
 
 export const getAllSites = async (query) => {
   try {

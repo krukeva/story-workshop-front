@@ -12,10 +12,10 @@ export async function getSituationList(query) {
     }
     if (query) {
       situations = matchSorter(situations, query, {
-        keys: ["name", "keywords"],
+        keys: ["name", "content"],
       })
     }
-    return situations.sort(sortBy("date"))
+    return situations.sort(sortBy("name"))
   } catch (error) {
     throw error
   }

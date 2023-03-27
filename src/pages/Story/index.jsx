@@ -16,7 +16,7 @@ import QuillReader from "../../components/QuillReader"
 
 import { getStory } from "../../database/stories"
 import { getWorld, getWorlds } from "../../database/worlds"
-import { loadStory } from "../../services/storyService"
+import { loadStory } from "../../services/currentStoryService"
 
 const StyledKeyword = styled.span`
   display: inline-block;

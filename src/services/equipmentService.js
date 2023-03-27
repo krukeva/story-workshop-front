@@ -1,5 +1,5 @@
 import * as Equipment from "../database/equipments"
-import { readStory } from "./storyService.js"
+import { readStory } from "./currentStoryService.js"
 
 export const getAllEquipments = async (query) => {
   try {

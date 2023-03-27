@@ -8,7 +8,9 @@ import { getOneEvent } from "../../services/eventService"
 
 const Wrapper = styled.div`
   position: relative;
+  width: 100%;
 `
+
 export const FixedDiv = styled.div`
   position: absolute;
   right: ${(props) => props.right || "auto"};
@@ -48,6 +50,26 @@ export default function Event() {
           <span>{event.name || ""}</span>
         </DataTemplate.Name>
 
+        <DataTemplate.StartDate>
+          <span>
+            {new Date(event.startDateTime).toLocaleDateString("fr-FR")}
+          </span>
+        </DataTemplate.StartDate>
+
+        <DataTemplate.StartTime>
+          <span>
+            {new Date(event.startDateTime).toLocaleTimeString("fr-FR")}
+          </span>
+        </DataTemplate.StartTime>
+
+        <DataTemplate.EndDate>
+          <span>{new Date(event.endDateTime).toLocaleDateString("fr-FR")}</span>
+        </DataTemplate.EndDate>
+
+        <DataTemplate.EndTime>
+          <span>{new Date(event.endDateTime).toLocaleTimeString("fr-FR")}</span>
+        </DataTemplate.EndTime>
+
         <DataTemplate.KeyWords>
           {event.keywords &&
             event.keywords.map((keyword, index) => (
@@ -57,7 +79,14 @@ export default function Event() {
               </span>
             ))}
         </DataTemplate.KeyWords>
+
+        <DataTemplate.Description>
+          <span>
+            {event.description || <i>Aucune description disponible.</i>}
+          </span>
+        </DataTemplate.Description>
       </DataTemplate>
+
       <Outlet context={event} />
     </Wrapper>
   )

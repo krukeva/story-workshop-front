@@ -10,6 +10,8 @@ import {
   DeleteButton,
 } from "../../components/buttons"
 
+import { getDateAndTime } from "../../utils/functions/dates"
+
 const Wrapper = styled.div`
   position: relative;
 `
@@ -38,13 +40,21 @@ const KeywordGrid = styled.div`
 const Button = styled.button``
 
 function getInitialValues(event) {
+  const startDateTime = getDateAndTime(event.startDateTime)
+  const endDateTime = getDateAndTime(event.endDateTime)
+
   let initialValue = {
     name: event.name || "",
+    startDate: startDateTime.date || "1960-01-01",
+    startTime: startDateTime.time || "12:00",
+    endDate: endDateTime.date || "1960-01-01",
+    endTime: endDateTime.time || "12:00",
     keywords: event.keywords
       ? event.keywords.map((word) => {
           return { word: word }
         })
       : [{ word: "" }],
+    description: event.description || "",
   }
   return initialValue
 }
@@ -59,6 +69,12 @@ export default function EditEvent() {
       <Formik
         initialValues={getInitialValues(event)}
         onSubmit={async (values) => {
+          const startDateTime = new Date(
+            values.startDate.concat("T" + values.startTime)
+          )
+          const endDateTime = new Date(
+            values.endDate.concat("T" + values.endTime)
+          )
           let keywords = []
           for (let i = 0; i < values.keywords.length; i++) {
             if (values.keywords[i].word.length > 0) {
@@ -67,6 +83,9 @@ export default function EditEvent() {
           }
           const newData = { ...values }
           newData.keywords = keywords.join("|")
+          newData.startDateTime = startDateTime
+          newData.endDateTime = endDateTime
+
           submit(newData, {
             method: "post",
           })
@@ -78,6 +97,23 @@ export default function EditEvent() {
               <DataTemplate.Name>
                 <Field type="text" name="name" />
               </DataTemplate.Name>
+
+              <DataTemplate.StartDate>
+                <Field type="date" name="startDate" />
+              </DataTemplate.StartDate>
+
+              <DataTemplate.StartTime>
+                <Field type="time" name="startTime" />
+              </DataTemplate.StartTime>
+
+              <DataTemplate.EndDate>
+                <Field type="date" name="endDate" />
+              </DataTemplate.EndDate>
+
+              <DataTemplate.EndTime>
+                <Field type="time" name="endTime" />
+              </DataTemplate.EndTime>
+
               <DataTemplate.KeyWords>
                 <FieldArray name="keywords">
                   {({ insert, remove, push }) => (
@@ -87,7 +123,7 @@ export default function EditEvent() {
                           <StyledKeyword key={index}>
                             <Field
                               name={`keywords.${index}.word`}
-                              placeholder="Mistery Inc."
+                              placeholder="attentat, manifestation, interview,..."
                               type="text"
                             />
                             <DeleteButton
@@ -105,6 +141,14 @@ export default function EditEvent() {
                   )}
                 </FieldArray>
               </DataTemplate.KeyWords>
+
+              <DataTemplate.Description>
+                <Field
+                  as="textarea"
+                  name="description"
+                  style={{ width: "100%", minHeight: "90px" }}
+                />
+              </DataTemplate.Description>
             </DataTemplate>
 
             <FixedDiv bottom="15px" right="50px">

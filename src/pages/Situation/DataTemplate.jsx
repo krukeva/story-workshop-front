@@ -3,27 +3,37 @@ import styled from "styled-components"
 
 import colors from "../../utils/styles/colors"
 
-import DataSheet from "../../utils/templates/DataSheet"
+import DocumentTemplate from "../../utils/templates/DocumentTemplate"
 
-const DataField = styled.div`
-  margin: 0;
-  margin-bottom: 1em;
-  padding: 0;
-  display: flex;
-  flex-direction: line;
-  justify-content: flex-start;
-  text-align: left;
-`
-const FieldLabel = styled.div`
-  width: 150px;
-  margin: 0;
-  padding: 5px;
-`
+const Title = styled.h1``
+
 const FieldValue = styled.div`
-  border-bottom: 2px solid ${colors.organisation};
+  border-bottom: 2px solid ${colors.event};
   padding: 5px;
   margin: 0;
   min-width: 100px;
+`
+
+const Label = styled.label`
+  margin: 0 1em;
+`
+const DateTimeField = styled.div`
+  margin: 0;
+  margin-bottom: 1em;
+  padding: 0;
+  padding-left: 2em;
+  display: flex;
+  flex-direction: line;
+  justify-content: flex-end;
+  align-items: center;
+`
+
+const StyledDescription = styled.div`
+  border: 2px solid ${colors.event};
+  text-align: left;
+  margin-left: 5px;
+  padding: 5px;
+  min-height: 100px;
 `
 
 const DataTemplate = ({ children }) => {
@@ -41,23 +51,23 @@ const DataTemplate = ({ children }) => {
     })
   })
   return (
-    <DataSheet>
-      <DataSheet.Header entityType="event">
-        <DataField>
-          <FieldLabel>
-            <label htmlFor="name">Nom&nbsp;: </label>
-          </FieldLabel>
-          <FieldValue>{subComponents.Name}</FieldValue>
-        </DataField>
+    <DocumentTemplate>
+      <DocumentTemplate.Header entityType="event">
+        <Title>{subComponents.Name}</Title>
 
-        <DataField>
-          <FieldLabel>
-            <label htmlFor="keywords">mots-clefs&nbsp;: </label>
-          </FieldLabel>
-          <FieldValue>{subComponents.KeyWords}</FieldValue>
-        </DataField>
-      </DataSheet.Header>
-    </DataSheet>
+        <DateTimeField>
+          <Label htmlFor="diffusionDate">le</Label>
+          <FieldValue>{subComponents.DiffusionDate}</FieldValue>
+
+          <Label htmlFor="diffusionTime">à</Label>
+          <FieldValue>{subComponents.DiffusionTime}</FieldValue>
+        </DateTimeField>
+      </DocumentTemplate.Header>
+
+      <DocumentTemplate.Body>
+        <StyledDescription>{subComponents.Content}</StyledDescription>
+      </DocumentTemplate.Body>
+    </DocumentTemplate>
   )
 }
 export default DataTemplate
@@ -65,5 +75,10 @@ export default DataTemplate
 const Name = (props) => <div>{props.children}</div>
 DataTemplate.Name = Name
 
-const KeyWords = (props) => <div>{props.children}</div>
-DataTemplate.KeyWords = KeyWords
+const DiffusionDate = (props) => <div>{props.children}</div>
+DataTemplate.DiffusionDate = DiffusionDate
+const DiffusionTime = (props) => <div>{props.children}</div>
+DataTemplate.DiffusionTime = DiffusionTime
+
+const Content = (props) => <div>{props.children}</div>
+DataTemplate.Content = Content

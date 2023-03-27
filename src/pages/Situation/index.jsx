@@ -3,7 +3,7 @@ import styled from "styled-components"
 import colors from "../../utils/styles/colors"
 import DataTemplate from "./DataTemplate"
 import { EditButton, DeleteButton } from "../../components/buttons"
-
+import QuillReader from "../../components/QuillReader"
 import { getOneSituation } from "../../services/situationService"
 
 const Wrapper = styled.div`
@@ -43,19 +43,35 @@ export default function Situation() {
           <DeleteButton type="submit" />
         </Form>
       </FixedDiv>
+
       <DataTemplate>
-        <DataTemplate.Name>
-          <span>{situation.name || ""}</span>
-        </DataTemplate.Name>
-        <DataTemplate.KeyWords>
-          {situation.keywords &&
-            situation.keywords.map((keyword, index) => (
-              <span key={index}>
-                {keyword}
-                {index < situation.keywords.length - 1 && ", "}
-              </span>
-            ))}
-        </DataTemplate.KeyWords>
+        <DataTemplate.Name>Point de situation</DataTemplate.Name>
+
+        <DataTemplate.DiffusionDate>
+          <span>
+            {new Date(
+              situation.diffusionDateTime || new Date()
+            ).toLocaleDateString("fr-FR")}
+          </span>
+        </DataTemplate.DiffusionDate>
+
+        <DataTemplate.DiffusionTime>
+          <span>
+            {new Date(
+              situation.diffusionDateTime || new Date()
+            ).toLocaleTimeString("fr-FR")}
+          </span>
+        </DataTemplate.DiffusionTime>
+
+        <DataTemplate.Content>
+          {situation.content ? (
+            <QuillReader value={situation.content} />
+          ) : (
+            <>
+              <em>Aucun contenu disponible.</em>
+            </>
+          )}
+        </DataTemplate.Content>
       </DataTemplate>
       <Outlet context={situation} />
     </Wrapper>

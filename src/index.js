@@ -19,6 +19,8 @@ import ExportStory from "./pages/Story/Export"
 import Story, { loader as storyLoader } from "./pages/Story"
 
 import StoryRoot, { loader as storyRootLoader } from "./routes/StoryRoot"
+import StoryIndex from "./routes/StoryRoot/StoryIndex"
+import { actionUpdateCurrentStory } from "./controllers/currentStoryController"
 
 import Worlds, {
   loader as worldListLoader,
@@ -92,6 +94,18 @@ import {
   actionDeleteEvent,
 } from "./controllers/eventController"
 
+import Situations, { loader as situationListLoader } from "./routes/Situations"
+import SituationIndex from "./routes/Situations/SituationIndex"
+import Situation, { loader as situationLoader } from "./pages/Situation"
+import EditSituation from "./pages/Situation/Edit"
+import DeleteSituation from "./pages/Situation/Delete"
+import {
+  actionCreateSituation,
+  actionUpdateSituation,
+  actionUpdateSituationWithoutMutation,
+  actionDeleteSituation,
+} from "./controllers/situationController"
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -133,6 +147,12 @@ const router = createBrowserRouter([
         element: <StoryRoot />,
         loader: storyRootLoader,
         children: [
+          {
+            index: true,
+            element: <StoryIndex />,
+            action: actionUpdateCurrentStory,
+            errorElement: <div>Oops! There was a problem with loading.</div>,
+          },
           {
             path: "people",
             element: <People />,
@@ -331,6 +351,47 @@ const router = createBrowserRouter([
                     element: <EditEvent />,
                     loader: eventLoader,
                     action: actionUpdateEvent,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            path: "situations",
+            element: <Situations />,
+            loader: situationListLoader,
+            action: actionCreateSituation,
+            children: [
+              {
+                errorElement: <ErrorPage />,
+                children: [
+                  {
+                    index: true,
+                    element: <SituationIndex />,
+                  },
+                  {
+                    path: ":situationId",
+                    element: <Situation />,
+                    loader: situationLoader,
+                    action: actionUpdateSituationWithoutMutation,
+                    children: [
+                      {
+                        path: "delete",
+                        element: <DeleteSituation />,
+                        action: actionDeleteSituation,
+                        errorElement: (
+                          <div>
+                            Oops! There was an error deleting the situation!
+                          </div>
+                        ),
+                      },
+                    ],
+                  },
+                  {
+                    path: ":situationId/edit",
+                    element: <EditSituation />,
+                    loader: situationLoader,
+                    action: actionUpdateSituation,
                   },
                 ],
               },

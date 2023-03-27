@@ -1,5 +1,5 @@
 import * as Organisation from "../database/organisations.js"
-import { readStory } from "./storyService.js"
+import { readStory } from "./currentStoryService.js"
 
 export const getAllOrganisations = async (query) => {
   try {

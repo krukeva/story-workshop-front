@@ -1,5 +1,5 @@
 import * as Event from "../database/events"
-import { readStory } from "./storyService.js"
+import { readStory } from "./currentStoryService.js"
 
 export const getAllEvents = async (query) => {
   try {

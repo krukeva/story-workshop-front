@@ -1,5 +1,5 @@
 import * as People from "../database/people.js"
-import { readStory } from "./storyService.js"
+import { readStory } from "./currentStoryService.js"
 export const getAllPeople = async (query) => {
   try {
     const allPeople = await People.getPeople(query)

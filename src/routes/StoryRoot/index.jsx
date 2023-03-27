@@ -1,13 +1,18 @@
-import { useLoaderData, Outlet, useOutletContext } from "react-router-dom"
+import {
+  useLoaderData,
+  Outlet,
+  useOutletContext,
+  NavLink,
+} from "react-router-dom"
 import { useEffect } from "react"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
 
-import colors from "../utils/styles/colors"
-import Header, { TitleLink } from "../utils/templates/Header"
+import colors from "../../utils/styles/colors"
+import Header, { TitleLink } from "../../utils/templates/Header"
 
-import { readStory } from "../services/storyService"
+import { readStory } from "../../services/currentStoryService"
 
 const LeftDiv = styled.div`
   display: flex;
@@ -27,9 +32,12 @@ const MiddleDiv = styled.div`
   align-items: center;
 `
 
-const StoryTitle = styled.div`
-  color: ${colors.text};
+const StoryTitle = styled(NavLink)`
   margin-left: 1em;
+  color: ${colors.lightPrimary};
+  text-decoration: none;
+  font-size: 24px;
+  text-align: center;
 `
 
 export async function loader() {
@@ -51,7 +59,7 @@ export default function StoryRoot() {
           <button onClick={() => setCollapsed(!collapsed)}>
             <FontAwesomeIcon icon={faBars} />
           </button>
-          <StoryTitle>{story.name}</StoryTitle>
+          <StoryTitle to="/story">{story.name}</StoryTitle>
         </LeftDiv>
         <MiddleDiv>
           <TitleLink to="/story/situations">Situations</TitleLink>
@@ -64,7 +72,7 @@ export default function StoryRoot() {
           <TitleLink to="/story/sites">Lieux</TitleLink>
         </RightDiv>
       </Header>
-      <Outlet />
+      <Outlet context={story} />
     </div>
   )
 }

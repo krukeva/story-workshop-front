@@ -25,6 +25,8 @@ const MainContainer = styled.div`
   margin: auto;
   width: 100%;
   margin-top: 0;
+  height: 100%;
+  overflow: auto;
 `
 
 export const BlockNavLink = styled(NavLink)`

@@ -35,7 +35,7 @@ export default function DeleteSite() {
         <p>
           Merci de confirmer la suppression de la situation{" "}
           <b>
-            &laquo;&nbsp;{`$situation.name}`}
+            &laquo;&nbsp;{`${situation.name}`}
             &nbsp;&raquo;.
           </b>
         </p>

@@ -1,14 +1,14 @@
 import { useLoaderData, useNavigate, useSubmit } from "react-router-dom"
-import { Formik, Field, Form, FieldArray } from "formik"
+import { useState } from "react"
+import { Formik, Field, Form } from "formik"
 import styled from "styled-components"
 
 import colors from "../../utils/styles/colors"
 import DataTemplate from "./DataTemplate"
-import {
-  SubmitButton,
-  CancelButton,
-  DeleteButton,
-} from "../../components/buttons"
+import QuillEditor from "../../components/QuillEditor"
+import { SubmitButton, CancelButton } from "../../components/buttons"
+
+import { getDateAndTime } from "../../utils/functions/dates"
 
 const Wrapper = styled.div`
   position: relative;
@@ -21,36 +21,22 @@ export const FixedDiv = styled.div`
   bottom: ${(props) => props.bottom || "auto"};
 `
 
-const StyledKeyword = styled.span`
-  display: inline-flex;
-  padding: 0 0.5em;
-  margin: 0 0.5em;
-`
-
-const KeywordGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  align-items: center;
-  justify-items: center;
-  gap: 25px;
-`
-
-const Button = styled.button``
-
 function getInitialValues(situation) {
+  const diffusionDateTime = getDateAndTime(situation.diffusionDateTime)
+
   let initialValue = {
     name: situation.name || "",
-    keywords: situation.keywords
-      ? situation.keywords.map((word) => {
-          return { word: word }
-        })
-      : [{ word: "" }],
+    diffusionDate: diffusionDateTime.date || "1960-01-01",
+    diffusionTime: diffusionDateTime.time || "12:00",
+    content: situation.content || "",
   }
   return initialValue
 }
 
 export default function EditSituation() {
   const { situation } = useLoaderData()
+  const [content, setContent] = useState(situation.content)
+
   const submit = useSubmit()
 
   const navigate = useNavigate()
@@ -59,68 +45,51 @@ export default function EditSituation() {
       <Formik
         initialValues={getInitialValues(situation)}
         onSubmit={async (values) => {
-          let keywords = []
-          for (let i = 0; i < values.keywords.length; i++) {
-            if (values.keywords[i].word.length > 0) {
-              keywords.push(values.keywords[i].word)
-            }
-          }
+          const diffusionDateTime = new Date(
+            values.diffusionDate.concat("T" + values.diffusionTime)
+          )
           const newData = { ...values }
-          newData.keywords = keywords.join("|")
+          newData.diffusionDateTime = diffusionDateTime
+          newData.content = content
+          newData.name = values.diffusionDate.concat(
+            " à " + values.diffusionTime
+          )
+
           submit(newData, {
             method: "post",
           })
         }}
       >
-        {({ values }) => (
-          <Form>
-            <DataTemplate>
-              <DataTemplate.Name>
-                <Field type="text" name="name" />
-              </DataTemplate.Name>
-              <DataTemplate.KeyWords>
-                <FieldArray name="keywords">
-                  {({ insert, remove, push }) => (
-                    <KeywordGrid>
-                      {values.keywords.length > 0 &&
-                        values.keywords.map((word, index) => (
-                          <StyledKeyword key={index}>
-                            <Field
-                              name={`keywords.${index}.word`}
-                              placeholder="Mistery Inc."
-                              type="text"
-                            />
-                            <DeleteButton
-                              type="button"
-                              size="25px"
-                              fontSize="12px"
-                              onClick={() => remove(index)}
-                            />
-                          </StyledKeyword>
-                        ))}
-                      <Button type="button" onClick={() => push({ word: "" })}>
-                        Ajouter un mot-clef
-                      </Button>
-                    </KeywordGrid>
-                  )}
-                </FieldArray>
-              </DataTemplate.KeyWords>
-            </DataTemplate>
+        <Form>
+          <DataTemplate>
+            <DataTemplate.Name>Point de situation</DataTemplate.Name>
 
-            <FixedDiv bottom="15px" right="50px">
-              <SubmitButton type="submit" color={colors.situation} />
-            </FixedDiv>
-            <FixedDiv top="45px" right="50px">
-              <CancelButton
-                type="button"
-                onClick={() => {
-                  navigate(-1)
-                }}
-                color="light-grey"
-              />
-            </FixedDiv>
-          </Form>
-        )}
+            <DataTemplate.DiffusionDate>
+              <Field type="date" name="diffusionDate" />
+            </DataTemplate.DiffusionDate>
+
+            <DataTemplate.DiffusionTime>
+              <Field type="time" name="diffusionTime" />
+            </DataTemplate.DiffusionTime>
+
+            <DataTemplate.Content>
+              <QuillEditor value={content} setValue={setContent} />
+            </DataTemplate.Content>
+          </DataTemplate>
+
+          <FixedDiv bottom="15px" right="50px">
+            <SubmitButton type="submit" color={colors.event} />
+          </FixedDiv>
+          <FixedDiv top="45px" right="50px">
+            <CancelButton
+              type="button"
+              onClick={() => {
+                navigate(-1)
+              }}
+              color="light-grey"
+            />
+          </FixedDiv>
+        </Form>
       </Formik>
     </Wrapper>
   )
