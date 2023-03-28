@@ -1,4 +1,4 @@
-import { useLoaderData, Outlet, NavLink } from "react-router-dom"
+import { useLoaderData, Outlet, NavLink, redirect } from "react-router-dom"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
@@ -36,6 +36,7 @@ const StoryTitle = styled(NavLink)`
 
 export async function loader() {
   const story = await readStory()
+  if (!story) return redirect("/stories")
   return { story }
 }
 
