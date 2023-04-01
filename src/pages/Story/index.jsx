@@ -1,30 +1,112 @@
-import { useLoaderData, useSubmit, Outlet, useNavigate } from "react-router-dom"
-import { useState, useEffect } from "react"
-import { Formik, Field, Form } from "formik"
-
+import { useLoaderData, Outlet, useNavigate, NavLink } from "react-router-dom"
 import styled from "styled-components"
+
 import colors from "../../utils/styles/colors"
 import { FixedDiv } from "../../utils/styles/Atoms"
-import DataTemplate from "./DataTemplate"
-import {
-  EditButton,
-  SubmitButton,
-  ExportButton,
-} from "../../components/buttons"
-import QuillEditor from "../../components/QuillEditor"
+import { ExportButton } from "../../components/buttons"
 import QuillReader from "../../components/QuillReader"
+import { KeywordData } from "../../utils/templates/KeywordsData"
 
 import { getStory } from "../../database/stories"
 import { getWorld, getWorlds } from "../../database/worlds"
 import { loadStory } from "../../services/currentStoryService"
 
-const StyledKeyword = styled.span`
-  display: inline-block;
-  background-color: ${colors.lightPrimary};
-  padding: 0 0.5em;
-  margin: 0 0.5em;
+const labelTranslator = {
+  world: "le monde entier",
+  contient: "un continent",
+  region: "quelques pays",
+  country: "un pays",
+  subcountry: "une zone à l'intérieur d'un pays",
+  city: "une ville",
+  farPast: "passé éloigné",
+  nearPast: "passé récent",
+  current: "contemporaine",
+  nearFuture: "futur proche",
+  farFuture: "future lointain",
+  unknown: "indéterminé",
+  real: "réel",
+  alternate: "alternative",
+  fictional: "fictionnelle",
+}
+
+const Wrapper = styled.div`
+  width: 75%;
+  margin: auto;
+`
+const H2 = styled.h2`
+  margin: 1em 0;
+  padding: 0;
+  color: ${colors.lightPrimary};
+  display: flex;
+  flex-direction: line;
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: 1px solid ${colors.primary};
+  padding-bottom: 1em;
+`
+const StoryName = styled.span`
+  color: ${colors.primary};
 `
 
+const LoadButton = styled.button`
+  display: inline-grid;
+  place-items: center;
+  border: none;
+  border-radius: 10px;
+  margin: 0;
+  padding: 10px;
+  background-color: ${colors.primary};
+  color: ${colors.text};
+  font-size: 20px;
+  font-family: sans-serif; /* Use whatever font-family you want */
+  line-height: 1;
+  -webkit-appearance: none;
+  &:hover {
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+      rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+  }
+`
+
+const FieldValue = styled.span`
+  border: 1px solid ${colors.primary};
+  border-radius: 5px;
+  padding: 5px;
+  margin: 0 5px;
+  min-width: 100px;
+  text-align: center;
+  display: inline-block;
+`
+
+const DateSpan = styled.span`
+  display: inline-block;
+`
+
+const Description = styled.div`
+  width:100%
+  margin: 0;
+  padding: 0;
+  border: 2px solid ${colors.primary};
+  border-radius: 5px;
+  min-height: 200px;
+  text-align: left;
+  padding: 1%;
+`
+
+const Metadata = styled.div`
+  display: flex;
+  flex-direction: line;
+  justify-content: space-around;
+`
+
+const Block = styled.div`
+  width: 33%;
+`
+
+const BlockTitle = styled.p`
+  margin: 1em 0;
+  padding: 0;
+`
 export async function loader({ params }) {
   const story = await getStory(params.storyId)
   if (!story) {
@@ -39,171 +121,105 @@ export async function loader({ params }) {
 }
 
 export default function Story() {
-  const { story, world, worlds } = useLoaderData()
-  const [editData, setEditData] = useState(false)
-  const [description, setDescription] = useState(story.description) || ""
-  const [newKeyword, setNewKeyword] = useState("")
-  const [newKeywords, setNewKeywords] = useState([])
-  const submit = useSubmit()
+  const { story, world } = useLoaderData()
   const navigate = useNavigate()
-
-  // Necessary for the mapping in case story.keywords is undefined
-  story.keywords = (Array.isArray(story.keywords) && story.keywords) || []
-
-  useEffect(() => {
-    if (!story.name || story.name === "") {
-      setEditData(true)
-    }
-  }, [story.name])
-
   return (
-    <div className="pageContainer withBackground">
-      {editData ? (
-        <Formik
-          initialValues={{
-            name: story.name || "",
-            startDate: story.startDate,
-            endDate: story.endDate,
-            worldId: story.worldId,
-            keywords: [...story.keywords],
-          }}
-          onSubmit={async (newData) => {
-            console.log(newData.startDate)
-            newData.description = description
-            newData.keywords = newData.keywords.join("|")
-            submit(newData, {
-              method: "post",
-              action: `/stories/${story.id}/update`,
-            })
-            setEditData(false)
-          }}
-        >
-          <Form>
-            <DataTemplate>
-              <DataTemplate.Name>
-                <Field type="text" name="name" />
-              </DataTemplate.Name>
+    <div>
+      <FixedDiv top="80px" left="80px">
+        <ExportButton onClick={() => navigate("export")} />
+      </FixedDiv>
 
-              <DataTemplate.StartDate>
-                <Field type="date" name="startDate" />
-              </DataTemplate.StartDate>
-
-              <DataTemplate.EndDate>
-                <Field type="date" name="endDate" />
-              </DataTemplate.EndDate>
-
-              <DataTemplate.World>
-                <Field name="worldId" as="select">
-                  <option value={null}>--</option>
-                  {worlds.map((world) => (
-                    <option key={world.id} value={world.id}>
-                      {world.name}
-                    </option>
-                  ))}
-                </Field>
-              </DataTemplate.World>
-
-              <DataTemplate.KeyWords>
-                {[...story.keywords, ...newKeywords].map((keyWord, index) => {
-                  return (
-                    <StyledKeyword key={index}>
-                      <label>
-                        <Field
-                          type="checkbox"
-                          name="keywords"
-                          value={keyWord}
-                        />
-                        {keyWord}
-                      </label>
-                    </StyledKeyword>
-                  )
-                })}
-                <p>
-                  <label>Ajouter un mot-clef&nbsp;: </label>
-                  <input
-                    type="text"
-                    name="newWord"
-                    value={newKeyword}
-                    onChange={(e) => {
-                      setNewKeyword(e.target.value)
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      if (newKeyword.length) {
-                        setNewKeywords([...newKeywords, newKeyword])
-                        setNewKeyword("")
-                      }
-                    }}
-                  >
-                    OK
-                  </button>
-                </p>
-              </DataTemplate.KeyWords>
-
-              <DataTemplate.Description>
-                <QuillEditor value={description} setValue={setDescription} />
-              </DataTemplate.Description>
-            </DataTemplate>
-
-            <FixedDiv top="80px" right="80px">
-              <SubmitButton type="submit" />
-            </FixedDiv>
-          </Form>
-        </Formik>
-      ) : (
-        <>
-          <FixedDiv top="80px" right="80px">
-            <EditButton onClick={() => setEditData(true)} />
-          </FixedDiv>
-          <FixedDiv top="80px" left="80px">
-            <ExportButton onClick={() => navigate("export")} />
-          </FixedDiv>
-          <button
+      <Wrapper>
+        <H2>
+          <div>
+            Histoire&nbsp;:{" "}
+            <StoryName>
+              &laquo;&nbsp;{story.name || "no name"}&nbsp;&raquo;
+            </StoryName>
+          </div>
+          <LoadButton
             onClick={async () => {
               await loadStory(story.id)
               navigate(`/story`)
             }}
           >
             Charger cette histoire
-          </button>
+          </LoadButton>
+        </H2>
 
-          <DataTemplate>
-            <DataTemplate.Name>
-              <span>{story.name || ""}</span>
-            </DataTemplate.Name>
+        <p>
+          Cette histoire se déroule dans le monde &laquo;&nbsp;
+          <NavLink to={`/worlds/${world.id}`}>{world.name}</NavLink>
+          &nbsp;&raquo;{" "}
+          <DateSpan>
+            entre le
+            <FieldValue>
+              {new Date(story.startDate).toLocaleDateString("fr-FR") || "???"}
+            </FieldValue>
+            et le
+            <FieldValue>
+              {new Date(story.endDate).toLocaleDateString("fr-FR") || "???"}.
+            </FieldValue>
+          </DateSpan>
+        </p>
 
-            <DataTemplate.StartDate>
-              <span>
-                {(typeof myVar === "string" && story.startDate) || ""}
-              </span>
-            </DataTemplate.StartDate>
-
-            <DataTemplate.EndDate>
-              <span>{(typeof myVar === "string" && story.endDate) || ""}</span>
-            </DataTemplate.EndDate>
-
-            <DataTemplate.World>
-              <span>{(world && world.name) || ""}</span>
-            </DataTemplate.World>
-
-            <DataTemplate.KeyWords>
-              {story.keywords &&
-                story.keywords.map((keyword, index) => (
-                  <span key={index}>
-                    {keyword}
-                    {index < story.keywords.length - 1 && ", "}
-                  </span>
-                ))}
-            </DataTemplate.KeyWords>
-
-            <DataTemplate.Description>
+        <Description>
+          {story.description && story.description.length > 0 ? (
+            <>
               <QuillReader value={story.description} />
-            </DataTemplate.Description>
-          </DataTemplate>
-        </>
-      )}
+            </>
+          ) : (
+            <>
+              <em>aucune description...</em>
+            </>
+          )}
+        </Description>
+        <Metadata>
+          <Block>
+            <BlockTitle>Mots-clefs</BlockTitle>
+            <ul>
+              <li>
+                <KeywordData keywords={story.keywords} label="de l'histoire" />
+              </li>
+              <li>
+                <KeywordData keywords={world.keywords} label="du monde" />
+              </li>
+            </ul>
+          </Block>
+          <Block>
+            <BlockTitle>Métadonnées du monde</BlockTitle>
+            <ul>
+              <li>
+                Echelle&nbsp;:{" "}
+                {typeof world.scale === "string" && world.scale.length > 2 ? (
+                  <span>{labelTranslator[world.scale] || world.scale}</span>
+                ) : (
+                  <em>inconnue</em>
+                )}
+              </li>
+              <li>
+                Période&nbsp;:{" "}
+                {typeof world.era === "string" && world.era.length > 2 ? (
+                  <span>{labelTranslator[world.era] || world.era}</span>
+                ) : (
+                  <em>inconnue</em>
+                )}
+              </li>
+              <li>
+                Géopolitique&nbsp;:{" "}
+                {typeof world.geopolitics === "string" &&
+                world.geopolitics.length > 2 ? (
+                  <span>
+                    {labelTranslator[world.geopolitics] || world.geopolitics}
+                  </span>
+                ) : (
+                  <em>inconnue</em>
+                )}
+              </li>
+            </ul>
+          </Block>
+        </Metadata>
+      </Wrapper>
       <Outlet context={story} />
     </div>
   )

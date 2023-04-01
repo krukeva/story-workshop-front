@@ -21,6 +21,19 @@ export async function getWorld(id) {
   }
 }
 
+export async function createWorld(worldToInsert) {
+  let id = Math.random().toString(36).substring(2, 9)
+  let world = { id, ...worldToInsert }
+  try {
+    let worlds = await getWorlds()
+    worlds.unshift(world)
+    await set(worlds)
+    return world
+  } catch (error) {
+    throw error
+  }
+}
+
 export async function updateWorldData(id, updatedData) {
   try {
     let worlds = await getWorlds()

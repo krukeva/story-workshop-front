@@ -98,6 +98,7 @@ import {
 import StoryManager from "./routes/StoryManager"
 import Stories, { loader as storyListLoader } from "./pages/Stories"
 import Story, { loader as storyLoader } from "./pages/Story"
+import EditStory from "./pages/Story/Edit"
 import DeleteStory from "./pages/Story/Delete"
 import ExportStory from "./pages/Story/Export"
 import {
@@ -397,10 +398,6 @@ const router = createBrowserRouter([
         loader: storyLoader,
         children: [
           {
-            path: "update",
-            action: actionUpdateStory,
-          },
-          {
             path: "export",
             element: <ExportStory />,
             action: actionExportStory,
@@ -411,6 +408,12 @@ const router = createBrowserRouter([
             action: actionDeleteStory,
           },
         ],
+      },
+      {
+        path: ":storyId/edit",
+        element: <EditStory />,
+        loader: storyLoader,
+        action: actionUpdateStory,
       },
     ],
   },

@@ -18,6 +18,20 @@ export const getOneWorld = async (id) => {
   }
 }
 
+export const createOneWorld = async (newWorld) => {
+  try {
+    const worldToInsert = {
+      ...newWorld,
+      createdAt: new Date().toLocaleString("fr-FR", { timeZone: "UTC" }),
+      updatedAt: new Date().toLocaleString("fr-FR", { timeZone: "UTC" }),
+    }
+    const createdWorld = await World.createWorld(worldToInsert)
+    return createdWorld
+  } catch (error) {
+    throw error
+  }
+}
+
 export const deleteOneWorld = async (id) => {
   try {
     await World.deleteWorld(id)

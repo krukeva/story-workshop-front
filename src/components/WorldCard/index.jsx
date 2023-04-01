@@ -11,7 +11,9 @@ export default function WorldCard({ world, isUsed }) {
     <Card openLink={`/worlds/${world.id}`}>
       <Card.Header openLink={`/worlds/${world.id}`}>
         <Card.Header.Title>
-          <span>{world.name}</span>
+          <span>
+            {world.name.substring(0, 50)} {world.name.length > 50 && "..."}
+          </span>
         </Card.Header.Title>
         {!isUsed && (
           <Card.Header.Buttons>

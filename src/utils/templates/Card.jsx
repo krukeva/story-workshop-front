@@ -15,32 +15,6 @@ const CardWrapper = styled.div`
   background-color: ${colors.lightPrimary};
 `
 
-const CardHeaderWrapper = styled.div`
-  margin: 0;
-  padding: 0;
-  height: 50px;
-  border-radius: 20px 0 0 0;
-  background-color: ${colors.primary};
-  width: 100%;
-  display: flex;
-  flex-direction: line;
-  justify-content: space-between;
-  align-items: center;
-  color: ${colors.text};
-`
-const StyledTitle = styled(NavLink)`
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  padding-left: 20px;
-  text-align: left;
-  text-decoration: none;
-  color: ${colors.text};
-`
-const ButtonWrapper = styled.div`
-  margin: 0 10px;
-`
-
 const CardContentWrapper = styled(NavLink)`
   margin: 0;
   padding: 0;
@@ -57,6 +31,7 @@ const CardBodyWrapper = styled.div`
   height: 100%;
   margin: 0;
   padding: 0;
+  overflow: auto;
 `
 const CardFooterWrapper = styled.div`
   margin: auto;
@@ -93,6 +68,35 @@ export default function Card({ children, openLink }) {
     </CardWrapper>
   )
 }
+
+const CardHeaderWrapper = styled.div`
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  height: 50px;
+  border-radius: 20px 0 0 0;
+  background-color: ${colors.primary};
+  display: flex;
+  flex-direction: line;
+  justify-content: space-between;
+  align-items: center;
+  color: ${colors.text};
+`
+
+const StyledTitle = styled(NavLink)`
+  display: block;
+  height: 50px;
+  width: 100%;
+  margin: 0;
+  padding: 5px 0 5px 10px;
+  text-align: left;
+  text-decoration: none;
+  font-size: 14px;
+  color: ${colors.text};
+`
+const ButtonWrapper = styled.div`
+  margin: 0 10px;
+`
 
 const Header = ({ children, openLink }) => {
   let subComponentList = Object.keys(Header)

@@ -162,47 +162,56 @@ export default function World() {
           </HorizontalTabs.TabItem>
 
           <HorizontalTabs.TabItem buttonLabel={"Données"}>
-            <p>
-              Personnes&nbsp;({world.data.people.length.toString()})&nbsp;:{" "}
-              {world.data.people.map((item, index) => (
-                <span key={item.id}>
-                  {`${item.name} (${item.activity})` +
-                    (index < world.data.people.length - 1 ? ", " : ".")}
-                </span>
-              ))}{" "}
-            </p>
+            {typeof world.data === "object" ? (
+              <div>
+                <p>
+                  Personnes&nbsp;({world.data.people.length.toString()})&nbsp;:{" "}
+                  {world.data.people.map((item, index) => (
+                    <span key={item.id}>
+                      {`${item.name} (${item.activity})` +
+                        (index < world.data.people.length - 1 ? ", " : ".")}
+                    </span>
+                  ))}{" "}
+                </p>
 
-            <p>
-              Organisations&nbsp;({world.data.organisations.length.toString()}
-              )&nbsp;:{" "}
-              {world.data.organisations.map((item, index) => (
-                <span key={item.id}>
-                  {item.name +
-                    (index < world.data.organisations.length - 1 ? ", " : ".")}
-                </span>
-              ))}{" "}
-            </p>
+                <p>
+                  Organisations&nbsp;(
+                  {world.data.organisations.length.toString()}
+                  )&nbsp;:{" "}
+                  {world.data.organisations.map((item, index) => (
+                    <span key={item.id}>
+                      {item.name +
+                        (index < world.data.organisations.length - 1
+                          ? ", "
+                          : ".")}
+                    </span>
+                  ))}{" "}
+                </p>
 
-            <p>
-              Equipements&nbsp;({world.data.equipments.length.toString()}
-              )&nbsp;:{" "}
-              {world.data.equipments.map((item, index) => (
-                <span key={item.id}>
-                  {item.name +
-                    (index < world.data.equipments.length - 1 ? ", " : ".")}
-                </span>
-              ))}{" "}
-            </p>
+                <p>
+                  Equipements&nbsp;({world.data.equipments.length.toString()}
+                  )&nbsp;:{" "}
+                  {world.data.equipments.map((item, index) => (
+                    <span key={item.id}>
+                      {item.name +
+                        (index < world.data.equipments.length - 1 ? ", " : ".")}
+                    </span>
+                  ))}{" "}
+                </p>
 
-            <p>
-              Lieux&nbsp;({world.data.sites.length.toString()})&nbsp;:{" "}
-              {world.data.sites.map((item, index) => (
-                <span key={item.id}>
-                  {item.name +
-                    (index < world.data.sites.length - 1 ? ", " : ".")}
-                </span>
-              ))}{" "}
-            </p>
+                <p>
+                  Lieux&nbsp;({world.data.sites.length.toString()})&nbsp;:{" "}
+                  {world.data.sites.map((item, index) => (
+                    <span key={item.id}>
+                      {item.name +
+                        (index < world.data.sites.length - 1 ? ", " : ".")}
+                    </span>
+                  ))}{" "}
+                </p>
+              </div>
+            ) : (
+              <p>Ce monde n'a pas encore de données.</p>
+            )}
           </HorizontalTabs.TabItem>
         </HorizontalTabs>
       </Wrapper>

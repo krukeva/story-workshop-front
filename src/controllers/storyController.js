@@ -5,14 +5,20 @@ import * as Story from "../services/storyService"
 
 export async function actionCreateStory() {
   const newStory = await Story.createOneStory()
-  return redirect(`/stories/${newStory.id}`)
+  return redirect(`/stories/${newStory.id}/edit`)
 }
 
 export async function actionUpdateStory({ params, request }) {
   const { storyId } = params
   const formData = await request.formData()
   const updates = Object.fromEntries(formData)
-  updates.keywords = updates.keywords.split("|")
+  if (typeof updates.keywords !== "undefined") {
+    if (updates.keywords.length > 0) {
+      updates.keywords = updates.keywords.split("|")
+    } else {
+      updates.keywords = []
+    }
+  }
   const updatedStory = await Story.updateOneStory(storyId, updates)
   return redirect(`/stories/${updatedStory.id}`)
 }

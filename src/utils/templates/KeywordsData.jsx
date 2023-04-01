@@ -1,9 +1,9 @@
-export function KeywordData({ keywords }) {
+export function KeywordData({ keywords, label }) {
   keywords = (Array.isArray(keywords) && keywords) || []
 
   return (
     <p>
-      Mots-clefs&nbsp;:{" "}
+      {label ? `${label} : ` : "Mots-clefs&nbsp;: "}
       {keywords && keywords.length > 0 ? (
         keywords.map((keyword, index) => {
           return (
