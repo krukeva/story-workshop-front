@@ -78,6 +78,10 @@ export async function deleteEvent(id) {
   }
 }
 
+export async function resetEvents(newList) {
+  return await set(newList)
+}
+
 function set(events) {
   return localforage.setItem("events", events)
 }

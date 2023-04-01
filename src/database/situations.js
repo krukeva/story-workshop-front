@@ -78,6 +78,10 @@ export async function deleteSituation(id) {
   }
 }
 
+export async function resetSituations(newList) {
+  return await set(newList)
+}
+
 function set(situations) {
   return localforage.setItem("situations", situations)
 }

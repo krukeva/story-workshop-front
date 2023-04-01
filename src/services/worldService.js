@@ -27,6 +27,20 @@ export const deleteOneWorld = async (id) => {
   }
 }
 
+// Temp version to avoir erasing the Relations
+export const updateOneWorldData = async (id, data) => {
+  try {
+    const world = await World.getWorld(id)
+    const worldData = { ...world.data }
+    const newdata = { ...worldData, ...data }
+    newdata.updatedAt = new Date().toLocaleString("fr-FR", { timeZone: "UTC" })
+    const updatedWorld = await World.updateWorldData(id, newdata)
+    return updatedWorld
+  } catch (error) {
+    throw error
+  }
+}
+
 export const importOneWorld = async (world) => {
   try {
     const result = await World.importWorld(world)

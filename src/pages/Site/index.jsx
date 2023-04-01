@@ -1,7 +1,7 @@
 import { Form, useLoaderData, useFetcher, Outlet } from "react-router-dom"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faStar } from "@fortawesome/free-solid-svg-icons"
+import { faStar, faGlobe } from "@fortawesome/free-solid-svg-icons"
 import colors from "../../utils/styles/colors"
 import { RoundButton } from "../../utils/styles/Atoms"
 import DataTemplate from "./DataTemplate"
@@ -74,7 +74,13 @@ export default function Site() {
         <DataTemplate.Name>
           <StarredName>
             <span>{site.name || ""}</span>
-            <Favorite item={site} />
+            {typeof site.worldId === "string" ? (
+              <span>
+                <FontAwesomeIcon icon={faGlobe} />
+              </span>
+            ) : (
+              <Favorite item={site} />
+            )}
           </StarredName>
         </DataTemplate.Name>
         <DataTemplate.KeyWords>

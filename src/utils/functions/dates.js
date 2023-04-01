@@ -11,3 +11,15 @@ export const getDateAndTime = (dateTimeAsString) => {
 
   return { date: date, time: time }
 }
+
+// formatter une date FR pour utiliser new Date()
+// localString = "dd/mm/yyyy hh:mm:ss"
+export const getDateTimefromLocaleString = (localString) => {
+  const [date, time] = localString.split(" ")
+  const temp = date.split("/")
+  const formatedDateTime = [temp[2], temp[1], temp[0]]
+    .join("-")
+    .concat("T" + time)
+
+  return formatedDateTime
+}

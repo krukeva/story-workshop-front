@@ -76,8 +76,12 @@ export async function deletePerson(id) {
   }
 }
 
-function set(people) {
-  return localforage.setItem("people", people)
+export async function resetPeople(newList) {
+  return await set(newList)
+}
+
+async function set(people) {
+  return await localforage.setItem("people", people)
 }
 
 // fake a cache so we don't slow down stuff we've already seen

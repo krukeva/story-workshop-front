@@ -77,6 +77,10 @@ export async function deleteSite(id) {
   }
 }
 
+export async function resetSites(newList) {
+  return await set(newList)
+}
+
 function set(sites) {
   return localforage.setItem("sites", sites)
 }

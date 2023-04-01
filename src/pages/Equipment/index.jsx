@@ -1,7 +1,7 @@
 import { Form, useLoaderData, useFetcher, Outlet } from "react-router-dom"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faStar } from "@fortawesome/free-solid-svg-icons"
+import { faStar, faGlobe } from "@fortawesome/free-solid-svg-icons"
 import colors from "../../utils/styles/colors"
 import { RoundButton } from "../../utils/styles/Atoms"
 import DataTemplate from "./DataTemplate"
@@ -74,7 +74,13 @@ export default function Equipment() {
         <DataTemplate.Name>
           <StarredName>
             <span>{equipment.name || ""}</span>
-            <Favorite item={equipment} />
+            {typeof equipment.worldId === "string" ? (
+              <span>
+                <FontAwesomeIcon icon={faGlobe} />
+              </span>
+            ) : (
+              <Favorite item={equipment} />
+            )}
           </StarredName>
         </DataTemplate.Name>
         <DataTemplate.KeyWords>

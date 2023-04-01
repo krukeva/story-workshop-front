@@ -21,6 +21,19 @@ export async function getWorld(id) {
   }
 }
 
+export async function updateWorldData(id, updatedData) {
+  try {
+    let worlds = await getWorlds()
+    let world = worlds.find((world) => world.id === id)
+    if (!world) throw new Error("No world found for", id)
+    world.data = updatedData
+    await set(worlds)
+    return world
+  } catch (error) {
+    throw error
+  }
+}
+
 export async function deleteWorld(id) {
   try {
     let worlds = await getWorlds()

@@ -11,7 +11,10 @@ import CurrentStoryWorkspace, {
   loader as storyRootLoader,
 } from "./routes/CurrentStory"
 import StoryIndex from "./routes/CurrentStory/StoryIndex"
-import { actionUpdateCurrentStory } from "./controllers/currentStoryController"
+import {
+  actionUpdateCurrentStory,
+  actionSaveCurrentStory,
+} from "./controllers/currentStoryController"
 
 import People, { loader as peopleLoader } from "./routes/People"
 import PeopleIndex from "./routes/People/PeopleIndex"
@@ -127,6 +130,7 @@ const router = createBrowserRouter([
     path: "story",
     element: <CurrentStoryWorkspace />,
     loader: storyRootLoader,
+    action: actionSaveCurrentStory,
     children: [
       {
         index: true,

@@ -87,7 +87,7 @@ export default function EditSite() {
                           <StyledKeyword key={index}>
                             <Field
                               name={`keywords.${index}.word`}
-                              placeholder="Mistery Inc."
+                              placeholder="Area 51"
                               type="text"
                             />
                             <DeleteButton

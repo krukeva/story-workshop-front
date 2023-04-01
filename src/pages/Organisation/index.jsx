@@ -1,7 +1,7 @@
 import { Form, useLoaderData, useFetcher, Outlet } from "react-router-dom"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faStar } from "@fortawesome/free-solid-svg-icons"
+import { faStar, faGlobe } from "@fortawesome/free-solid-svg-icons"
 import colors from "../../utils/styles/colors"
 import { RoundButton } from "../../utils/styles/Atoms"
 import DataTemplate from "./DataTemplate"
@@ -74,7 +74,13 @@ export default function Organisation() {
         <DataTemplate.Name>
           <StarredName>
             <span>{organisation.name || ""}</span>
-            <Favorite item={organisation} />
+            {typeof organisation.worldId === "string" ? (
+              <span>
+                <FontAwesomeIcon icon={faGlobe} />
+              </span>
+            ) : (
+              <Favorite item={organisation} />
+            )}
           </StarredName>
         </DataTemplate.Name>
         <DataTemplate.KeyWords>

@@ -1,6 +1,8 @@
 import { NavLink, Form, useNavigation, useSubmit } from "react-router-dom"
 import { useEffect, useState } from "react"
 import styled, { keyframes } from "styled-components"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faGlobe } from "@fortawesome/free-solid-svg-icons"
 
 import colors from "../styles/colors"
 import PageWithNav from "../../utils/templates/PageWithNav"
@@ -187,7 +189,14 @@ export default function EntityExplorer({
                 <li key={item.id}>
                   <NavLink to={item.id}>
                     {item.name ? <>{item.name}</> : <i>Nom inconnu</i>}{" "}
-                    {starrable && item.favorite && <span>★</span>}
+                    {typeof item.worldId === "string" && (
+                      <span>
+                        <FontAwesomeIcon icon={faGlobe} />
+                      </span>
+                    )}
+                    {typeof item.worldId !== "string" &&
+                      starrable &&
+                      item.favorite && <span>★</span>}
                   </NavLink>
                 </li>
               ))}

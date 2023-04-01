@@ -161,8 +161,8 @@ export default function Story() {
             <ExportButton onClick={() => navigate("export")} />
           </FixedDiv>
           <button
-            onClick={() => {
-              loadStory(story.id)
+            onClick={async () => {
+              await loadStory(story.id)
               navigate(`/story`)
             }}
           >

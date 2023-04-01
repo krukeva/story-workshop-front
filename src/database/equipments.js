@@ -79,6 +79,10 @@ export async function deleteEquipment(id) {
   }
 }
 
+export async function resetEquipments(newList) {
+  return await set(newList)
+}
+
 function set(equipments) {
   return localforage.setItem("equipments", equipments)
 }

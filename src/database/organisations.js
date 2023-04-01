@@ -85,6 +85,10 @@ export async function deleteOrganisation(id) {
   }
 }
 
+export async function resetOrganisations(newList) {
+  return await set(newList)
+}
+
 function set(organisations) {
   return localforage.setItem("organisations", organisations)
 }

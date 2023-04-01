@@ -1,7 +1,7 @@
 import { Form, useLoaderData, useFetcher, Outlet } from "react-router-dom"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faStar } from "@fortawesome/free-solid-svg-icons"
+import { faStar, faGlobe } from "@fortawesome/free-solid-svg-icons"
 import { getOnePerson } from "../../services/personService"
 import colors from "../../utils/styles/colors"
 import { RoundButton } from "../../utils/styles/Atoms"
@@ -73,7 +73,13 @@ export default function Person() {
         <DataTemplate.Name>
           <StarredName>
             <span>{person.name || ""}</span>
-            <Favorite person={person} />
+            {typeof person.worldId === "string" ? (
+              <span>
+                <FontAwesomeIcon icon={faGlobe} />
+              </span>
+            ) : (
+              <Favorite person={person} />
+            )}
           </StarredName>
         </DataTemplate.Name>
         <DataTemplate.Activity>
