@@ -2,16 +2,15 @@ import { useLoaderData, Form } from "react-router-dom"
 
 import GridContainer from "../../utils/templates/GridContainer"
 import { FixedDiv } from "../../utils/styles/Atoms"
-import StoryCard from "../../components/StoryCard"
 import { AddButton } from "../../components/buttons"
+
+import StoryCard from "../../components/StoryCard"
 
 import { getStories } from "../../database/stories"
 
-export async function loader({ request }) {
-  const url = new URL(request.url)
-  const q = url.searchParams.get("q")
-  const stories = await getStories(q)
-  return { stories, q }
+export async function loader() {
+  const stories = await getStories()
+  return { stories }
 }
 
 export default function Stories() {

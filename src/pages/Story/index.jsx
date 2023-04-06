@@ -146,23 +146,32 @@ export default function Story() {
             Charger cette histoire
           </LoadButton>
         </H2>
-
         <p>
-          Cette histoire se déroule dans le monde &laquo;&nbsp;
-          <NavLink to={`/worlds/${world.id}`}>{world.name}</NavLink>
-          &nbsp;&raquo;{" "}
-          <DateSpan>
-            entre le
-            <FieldValue>
-              {new Date(story.startDate).toLocaleDateString("fr-FR") || "???"}
-            </FieldValue>
-            et le
-            <FieldValue>
-              {new Date(story.endDate).toLocaleDateString("fr-FR") || "???"}.
-            </FieldValue>
-          </DateSpan>
-        </p>
+          {world ? (
+            <>
+              Cette histoire se déroule dans le monde &laquo;&nbsp;
+              <NavLink to={`/worlds/${world.id}`}>{world.name}</NavLink>
+              &nbsp;&raquo;{" "}
+            </>
+          ) : (
+            <>Cette histoire se déroule dans un monde indéterminé </>
+          )}
 
+          {story.startDate ? (
+            <DateSpan>
+              entre le
+              <FieldValue>
+                {new Date(story.startDate).toLocaleDateString("fr-FR") || "???"}
+              </FieldValue>
+              et le
+              <FieldValue>
+                {new Date(story.endDate).toLocaleDateString("fr-FR") || "???"}.
+              </FieldValue>
+            </DateSpan>
+          ) : (
+            <>à une période indéterminée.</>
+          )}
+        </p>
         <Description>
           {story.description && story.description.length > 0 ? (
             <>
@@ -174,51 +183,56 @@ export default function Story() {
             </>
           )}
         </Description>
-        <Metadata>
-          <Block>
-            <BlockTitle>Mots-clefs</BlockTitle>
-            <ul>
-              <li>
-                <KeywordData keywords={story.keywords} label="de l'histoire" />
-              </li>
-              <li>
-                <KeywordData keywords={world.keywords} label="du monde" />
-              </li>
-            </ul>
-          </Block>
-          <Block>
-            <BlockTitle>Métadonnées du monde</BlockTitle>
-            <ul>
-              <li>
-                Echelle&nbsp;:{" "}
-                {typeof world.scale === "string" && world.scale.length > 2 ? (
-                  <span>{labelTranslator[world.scale] || world.scale}</span>
-                ) : (
-                  <em>inconnue</em>
-                )}
-              </li>
-              <li>
-                Période&nbsp;:{" "}
-                {typeof world.era === "string" && world.era.length > 2 ? (
-                  <span>{labelTranslator[world.era] || world.era}</span>
-                ) : (
-                  <em>inconnue</em>
-                )}
-              </li>
-              <li>
-                Géopolitique&nbsp;:{" "}
-                {typeof world.geopolitics === "string" &&
-                world.geopolitics.length > 2 ? (
-                  <span>
-                    {labelTranslator[world.geopolitics] || world.geopolitics}
-                  </span>
-                ) : (
-                  <em>inconnue</em>
-                )}
-              </li>
-            </ul>
-          </Block>
-        </Metadata>
+        {world && (
+          <Metadata>
+            <Block>
+              <BlockTitle>Mots-clefs</BlockTitle>
+              <ul>
+                <li>
+                  <KeywordData
+                    keywords={story.keywords}
+                    label="de l'histoire"
+                  />
+                </li>
+                <li>
+                  <KeywordData keywords={world.keywords} label="du monde" />
+                </li>
+              </ul>
+            </Block>
+            <Block>
+              <BlockTitle>Métadonnées du monde</BlockTitle>
+              <ul>
+                <li>
+                  Echelle&nbsp;:{" "}
+                  {typeof world.scale === "string" && world.scale.length > 2 ? (
+                    <span>{labelTranslator[world.scale] || world.scale}</span>
+                  ) : (
+                    <em>inconnue</em>
+                  )}
+                </li>
+                <li>
+                  Période&nbsp;:{" "}
+                  {typeof world.era === "string" && world.era.length > 2 ? (
+                    <span>{labelTranslator[world.era] || world.era}</span>
+                  ) : (
+                    <em>inconnue</em>
+                  )}
+                </li>
+                <li>
+                  Géopolitique&nbsp;:{" "}
+                  {typeof world.geopolitics === "string" &&
+                  world.geopolitics.length > 2 ? (
+                    <span>
+                      {labelTranslator[world.geopolitics] || world.geopolitics}
+                    </span>
+                  ) : (
+                    <em>inconnue</em>
+                  )}
+                </li>
+              </ul>
+            </Block>
+          </Metadata>
+        )}
       </Wrapper>
       <Outlet context={story} />
     </div>

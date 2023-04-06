@@ -27,6 +27,24 @@ export const TitleLink = styled(NavLink)`
     background-color: ${colors.lightPrimary};
   }
 `
+export const LeftDiv = styled.div`
+  display: flex;
+  flex-direction: line;
+  justify-content: space-between;
+  align-items: center;
+`
+
+export const RightDiv = styled.div`
+  display: flex;
+  flex-direction: line;
+  align-items: center;
+`
+
+export const MiddleDiv = styled.div`
+  display: flex;
+  flex-direction: line;
+  align-items: center;
+`
 
 function Header({ collapsed, children }) {
   return <NavContainer collapsed={collapsed}>{children}</NavContainer>

@@ -1,4 +1,8 @@
 export const getDateAndTime = (dateTimeAsString) => {
+  if (typeof dateTimeAsString === "undefined") {
+    return null
+  }
+
   const dateTime = new Date(dateTimeAsString)
   const day = dateTime.getDate().toString().padStart(2, "0")
   const month = (dateTime.getMonth() + 1).toString().padStart(2, "0")

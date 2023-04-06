@@ -92,6 +92,18 @@ import {
   actionDeleteSituation,
 } from "./controllers/situationController"
 
+import Sequences, { loader as sequenceListLoader } from "./routes/Sequences"
+import SequenceIndex from "./routes/Sequences/SequenceIndex"
+import Sequence, { loader as sequenceLoader } from "./pages/Sequence"
+//import EditSituation from "./pages/Situation/Edit"
+//import DeleteSituation from "./pages/Situation/Delete"
+import {
+  actionCreateSequence,
+  actionUpdateSequence,
+  actionUpdateSequenceWithoutMutation,
+  actionDeleteSequences,
+} from "./controllers/sequenceController"
+
 /////////////////////////////////////////////////
 // Story catalogue
 /////////////////////////////////////////////////
@@ -105,6 +117,7 @@ import {
   actionCreateStory,
   actionUpdateStory,
   actionDeleteStory,
+  actionLoadStories,
   actionExportStory,
 } from "./controllers/storyController"
 
@@ -379,6 +392,47 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: "sequences",
+        element: <Sequences />,
+        loader: sequenceListLoader,
+        action: actionCreateSequence,
+        children: [
+          {
+            errorElement: <ErrorPage />,
+            children: [
+              {
+                index: true,
+                element: <SequenceIndex />,
+              },
+              {
+                path: ":sequenceId",
+                element: <Sequence />,
+                loader: sequenceLoader,
+                action: actionUpdateSequenceWithoutMutation,
+                /*children: [
+                  {
+                    path: "delete",
+                    element: <DeleteSequence />,
+                    action: actionDeleteSequence,
+                    errorElement: (
+                      <div>
+                        Oops! There was an error deleting the sequence!
+                      </div>
+                    ),
+                  },
+                ],*/
+              },
+              /*{
+                path: ":sequenceId/edit",
+                element: <EditSequence />,
+                loader: situationLoader,
+                action: actionUpdateSituation,
+              },*/
+            ],
+          },
+        ],
+      },
     ],
   },
   {
@@ -418,15 +472,19 @@ const router = createBrowserRouter([
     ],
   },
   {
+    path: "/stories/import",
+    action: actionLoadStories,
+  },
+  {
     path: "worlds",
     element: <WorldManager />,
+    action: actionLoadWorlds,
     errorElement: <ErrorPage />,
     children: [
       {
         index: true,
         element: <Worlds />,
         loader: worldListLoader,
-        action: actionLoadWorlds,
       },
       {
         path: ":worldId",

@@ -1,4 +1,7 @@
+import format from "date-fns/format"
+
 import * as Story from "../database/stories"
+import { writeFile } from "../utils/functions/files"
 
 export const getAllStories = async () => {
   try {
@@ -61,6 +64,30 @@ export const importOneStory = async (story) => {
         : "Echec de l'import."
     )
     return result
+  } catch (error) {
+    throw error
+  }
+}
+
+export const importManyStories = async (storyList) => {
+  try {
+    const result = await Story.importStories(storyList)
+    console.log(
+      result
+        ? `${result} histoire(s) a/ont été importée(s) avec succès.`
+        : "Echec de l'import."
+    )
+    return result
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function exportAllStories() {
+  try {
+    const stories = await Story.getStories()
+    const date = format(new Date(), "yyyy-MM-dd")
+    writeFile(stories, `${date}_stories`)
   } catch (error) {
     throw error
   }

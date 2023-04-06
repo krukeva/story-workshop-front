@@ -7,7 +7,7 @@ import colors from "../../utils/styles/colors"
 import DataTemplate from "./DataTemplate"
 import { EditButton, DeleteButton } from "../../components/buttons"
 
-import { getOneEvent } from "../../services/eventService"
+import { getOneSequence } from "../../services/sequenceService"
 
 const Wrapper = styled.div`
   position: relative;
@@ -23,22 +23,23 @@ export const FixedDiv = styled.div`
 `
 
 export async function loader({ params }) {
-  const event = await getOneEvent(params.eventId)
-  if (!event) {
+  const sequence = await getOneSequence(params.sequenceId)
+  if (!sequence) {
     throw new Response("", {
       status: 404,
       statusText: "Not Found",
     })
   }
-  return { event }
+  return { sequence }
 }
 
-export default function Event() {
-  const { event } = useLoaderData()
+export default function Sequence() {
+  const { sequence } = useLoaderData()
 
   return (
     <Wrapper>
-      <FixedDiv top="15px" right="50px">
+      {sequence.name}
+      {/*<FixedDiv top="15px" right="50px">
         <Form action="edit">
           <EditButton type="submit" color={colors.event} />
         </Form>
@@ -100,9 +101,9 @@ export default function Event() {
             {event.description || <i>Aucune description disponible.</i>}
           </span>
         </DataTemplate.Description>
-      </DataTemplate>
+            </DataTemplate>*/}
 
-      <Outlet context={event} />
+      {/*<Outlet context={situatii} />*/}
     </Wrapper>
   )
 }

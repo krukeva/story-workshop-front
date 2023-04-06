@@ -1,6 +1,22 @@
 import { useLoaderData, useSubmit, useNavigate } from "react-router-dom"
-import { useState } from "react"
-import { Formik, Field, FieldArray, Form } from "formik"
+import { useState, useEffect } from "react"
+import {
+  Formik,
+  Field,
+  FieldArray,
+  Form,
+  useField,
+  useFormikContext,
+} from "formik"
+//import {
+//isDate,
+//differenceInDays,
+//addDays,
+//max,
+//parseISO,
+//format,
+//,
+//} from "date-fns"
 
 import styled from "styled-components"
 import colors from "../../utils/styles/colors"
@@ -48,11 +64,6 @@ const TitleField = styled(Field)`
   margin: 1em auto;
   padding: 5px;
   font-size: 24px;
-`
-
-const WorldField = styled.div`
-  width: 100%;
-  margin: auto;
 `
 
 const StyledKeyword = styled.span`
@@ -110,6 +121,71 @@ const Description = styled.div`
 
 const Button = styled.button``
 
+const StartDateField = ({ worlds, ...props }) => {
+  const {
+    values: { worldId },
+    setFieldValue,
+  } = useFormikContext()
+  const [field, meta] = useField(props)
+
+  useEffect(() => {
+    if (typeof worldId === "string" && worldId.length > 1) {
+      const world = worlds.find((item) => item.id === worldId)
+      setFieldValue(props.name, world.situation.date)
+    }
+  }, [worldId, worlds, setFieldValue, props.name])
+
+  return (
+    <>
+      <input {...props} {...field} />
+      {!!meta.touched && !!meta.error && <div>{meta.error}</div>}
+    </>
+  )
+}
+
+/*
+const EndDateField = (props) => {
+  const {
+    values: { startDate, endDate },
+    touched,
+    setFieldValue,
+    setFieldTouched,
+  } = useFormikContext()
+  const [field, meta] = useField(props)
+
+  const [diffInDays, setDiffInDays] = useState(0)
+
+  useEffect(() => {
+    if (touched.endDate) {
+      console.log("touched")
+      if (isValid(new Date(startDate)) && isValid(new Date(endDate))) {
+        setDiffInDays(differenceInDays(new Date(startDate), new Date(endDate)))
+        //setFieldTouched(props.name, false)
+      }
+    } else if (isValid(new Date(startDate))) {
+      console.log("else")
+      const newEndDate = addDays(new Date(startDate), diffInDays)
+      setFieldValue(props.name, format(newEndDate, "yyyy-MM-dd"))
+    }
+  }, [
+    touched.endDate,
+    endDate,
+    startDate,
+    setFieldValue,
+    setFieldTouched,
+    props.name,
+    diffInDays,
+  ])
+
+  return (
+    <>
+      <input {...props} {...field} />
+      {!!meta.touched && !!meta.error && <div>{meta.error}</div>}
+    </>
+  )
+}
+*/
+
 export default function EditStory() {
   const { story, worlds } = useLoaderData()
   const [description, setDescription] = useState(story.description) || ""
@@ -124,9 +200,9 @@ export default function EditStory() {
       <Formik
         initialValues={{
           name: story.name || "",
-          startDate: story.startDate,
-          endDate: story.endDate,
-          worldId: story.worldId,
+          startDate: story.startDate || "",
+          endDate: story.endDate || "",
+          worldId: story.worldId || "",
           keywords: story.keywords
             ? story.keywords.map((word) => {
                 return { word: word }
@@ -169,8 +245,6 @@ export default function EditStory() {
           // Getting the description from the Quill writer
           newStory.description = description
 
-          console.log(newStory)
-
           submit(newStory, {
             method: "post",
           })
@@ -188,8 +262,8 @@ export default function EditStory() {
             <FieldLabel>
               <label htmlFor="worldId">Monde&nbsp;: </label>
             </FieldLabel>
-            <WorldField name="worldId" as="select">
-              <option value={null}>Un monde à créer</option>
+            <Field name="worldId" as="select">
+              <option value="">Un monde à créer</option>
               {worlds.map((world) => (
                 <option key={world.id} value={world.id}>
                   {world.name} ( échelle&nbsp;:{" "}
@@ -208,7 +282,7 @@ export default function EditStory() {
                   )
                 </option>
               ))}
-            </WorldField>
+            </Field>
             <Description>
               <DateGrid>
                 <GridDataField>
@@ -216,7 +290,11 @@ export default function EditStory() {
                     <label htmlFor="startDate">Date de début&nbsp;: </label>
                   </FieldLabel>
                   <FieldValue>
-                    <Field type="date" name="startDate" />
+                    <StartDateField
+                      type="date"
+                      name="startDate"
+                      worlds={worlds}
+                    />
                   </FieldValue>
                 </GridDataField>
 
@@ -235,6 +313,7 @@ export default function EditStory() {
             </Description>
 
             <FieldLabel>Mots-clefs</FieldLabel>
+
             <FieldArray name="keywords">
               {({ insert, remove, push }) => (
                 <>

@@ -1,4 +1,7 @@
+import format from "date-fns/format"
+
 import * as World from "../database/worlds"
+import { writeFile } from "../utils/functions/files"
 
 export const getAllWorlds = async () => {
   try {
@@ -78,6 +81,16 @@ export const importManyWorlds = async (worldList) => {
         : "Echec de l'import."
     )
     return result
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function exportAllWorlds() {
+  try {
+    const worlds = await World.getWorlds()
+    const date = format(new Date(), "yyyy-MM-dd")
+    writeFile(worlds, `${date}_worldsFromStoryWorkshop`)
   } catch (error) {
     throw error
   }

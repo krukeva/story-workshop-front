@@ -1,5 +1,5 @@
 import { redirect } from "react-router-dom"
-import { writeFile } from "../utils/functions/files"
+import { writeFile, readFile } from "../utils/functions/files"
 
 import * as Story from "../services/storyService"
 
@@ -35,4 +35,14 @@ export async function actionExportStory({ params, request }) {
   const updatedStory = await Story.updateOneStory(storyId, updates)
   writeFile(updatedStory, `story_${updatedStory.name}_v${updatedStory.version}`)
   return redirect(`/stories/${updatedStory.id}`)
+}
+
+export const actionLoadStories = async () => {
+  const newStories = await readFile()
+
+  if (Array.isArray(newStories)) {
+    return Story.importManyStories(newStories)
+  } else {
+    return Story.importOneStory(newStories)
+  }
 }

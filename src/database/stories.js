@@ -96,6 +96,28 @@ export async function importStory(story) {
   }
 }
 
+export async function importStories(storyList) {
+  try {
+    let stories = await getStories()
+
+    let numberOfImportedStories = 0
+    for (let i = 0; i < storyList.length; i++) {
+      let index = stories.findIndex((myStory) => storyList[i].id === myStory.id)
+      if (index > -1) {
+        console.log(
+          `L'histoire ${storyList[i].name} est déjà présente dans la base.`
+        )
+      } else {
+        stories.unshift(storyList[i])
+        numberOfImportedStories++
+      }
+    }
+    await set(stories)
+    return numberOfImportedStories
+  } catch (error) {
+    throw error
+  }
+}
 function set(stories) {
   return localforage.setItem("stories", stories)
 }

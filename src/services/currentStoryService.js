@@ -23,7 +23,7 @@ export async function loadStory(storyId) {
   let equipments = []
   let sites = []
 
-  if (world.data) {
+  if (world && world.data) {
     people = world.data.people || []
     organisations = world.data.organisations || []
     equipments = world.data.equipments || []
@@ -60,7 +60,7 @@ export async function loadStory(storyId) {
 
   // Initialise situations from the world and the story
   let situations = []
-  if (world.hasOwnProperty("situation")) {
+  if (world && world.hasOwnProperty("situation")) {
     const situation0 = {
       id: "initialSituation",
       name: world.situation.date.concat("-- Situation initiale"),

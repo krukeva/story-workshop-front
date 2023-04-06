@@ -8,6 +8,7 @@ import { getAllEquipments } from "../services/equipmentService"
 import { getAllSites } from "../services/siteService"
 import { getAllEvents } from "../services/eventService"
 import { getAllSituations } from "../services/situationService"
+import { getAllSequences } from "../services/sequenceService"
 
 export async function actionUpdateCurrentStory({ request }) {
   const formData = await request.formData()
@@ -30,6 +31,7 @@ export async function actionSaveCurrentStory({ request }) {
   const allSites = await getAllSites()
   const allEvents = await getAllEvents()
   const allSituations = await getAllSituations()
+  const allSequences = await getAllSequences()
 
   // save the entities which belong the the story
   updatedStory.people = allPeople.filter(
@@ -44,28 +46,30 @@ export async function actionSaveCurrentStory({ request }) {
   updatedStory.sites = allSites.filter(
     (item) => item.storyId === updatedStory.id
   )
-  updatedStory.events = allEvents.filter(
-    (item) => item.storyId === updatedStory.id
-  )
-  updatedStory.situations = allSituations.filter(
-    (item) => item.storyId === updatedStory.id
-  )
+  updatedStory.events = allEvents
+  updatedStory.situations = allSituations
+  updatedStory.sequences = allSequences
 
-  // Save the entities which belong to the world
-  const worldData = {}
-  worldData.people = allPeople.filter(
-    (item) => item.worldId === updatedStory.worldId
-  )
-  worldData.organisations = allOrganisations.filter(
-    (item) => item.worldId === updatedStory.worldId
-  )
-  worldData.equipments = allEquipments.filter(
-    (item) => item.worldId === updatedStory.worldId
-  )
-  worldData.sites = allSites.filter(
-    (item) => item.worldId === updatedStory.worldId
-  )
-  await updateOneWorldData(updatedStory.worldId, worldData)
+  if (
+    typeof updatedStory.worldId === "string" &&
+    updatedStory.worldId.length > 2
+  ) {
+    // Save the entities which belong to the world
+    const worldData = {}
+    worldData.people = allPeople.filter(
+      (item) => item.worldId === updatedStory.worldId
+    )
+    worldData.organisations = allOrganisations.filter(
+      (item) => item.worldId === updatedStory.worldId
+    )
+    worldData.equipments = allEquipments.filter(
+      (item) => item.worldId === updatedStory.worldId
+    )
+    worldData.sites = allSites.filter(
+      (item) => item.worldId === updatedStory.worldId
+    )
+    await updateOneWorldData(updatedStory.worldId, worldData)
+  }
 
   // update the current story in the database and returns
   return await updateOneStory(updatedStory.id, updatedStory)
